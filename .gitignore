@@ -1,2 +1,6 @@
 
 .DS_Store
+
+Notebooks/__pycache__/
+
+Notebooks/.ipynb_checkpoints/
