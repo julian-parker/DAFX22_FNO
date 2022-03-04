@@ -1,5 +1,5 @@
 # Model definitions copied from https://github.com/zongyi-li/fourier_neural_operator
-
+import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
