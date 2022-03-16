@@ -2,12 +2,11 @@ import torch
 from .layers import FourierConv1d
 
 class FNO_RNN_1d(torch.nn.Module):
-    def __init__(self, in_channels, out_channels, modes, width, depth = 4, activation = torch.nn.ReLU()):
+    def __init__(self, in_channels, out_channels, spatial_size, width, depth = 4, activation = torch.nn.ReLU()):
         super(FNO_RNN_1d, self).__init__()
 
         self.in_channels = in_channels
         self.out_channels = out_channels
-        self.modes = modes
         self.width = width
         self.depth = depth 
 
@@ -15,7 +14,7 @@ class FNO_RNN_1d(torch.nn.Module):
 
         self.fourier_conv_layers = torch.nn.ModuleList()
         for _ in range(self.depth):
-          self.fourier_conv_layers.append(FourierConv1d(self.width, self.width, self.modes))
+          self.fourier_conv_layers.append(FourierConv1d(self.width, self.width, spatial_size ))
 
         self.w = torch.nn.ModuleList()
         for _ in range(self.depth):
