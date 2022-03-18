@@ -58,7 +58,7 @@ class FourierConv2d(torch.nn.Module):
 
         x_ft = torch.fft.rfft2(x)
         out_ft = torch.zeros_like(x_ft)
-        out_ft[:, :, :self.size_x, :self.size_y] = torch.einsum("biyx,ioyx->boyx",x_ft[:, :, :self.size_x, :self.size_y], self.weights)
+        out_ft[:, :, :self.size_x, :self.size_y] = torch.einsum("bixy,ioxy->boxy",x_ft[:, :, :self.size_x, :self.size_y], self.weights)
         if self.bias:
           out_ft[:, :, :self.size_x, :self.size_y] += self.biases
         x = torch.fft.irfft2(out_ft)
