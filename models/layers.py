@@ -46,23 +46,23 @@ class FourierConv2d(torch.nn.Module):
           self.size_x = size_x // 2
           self.size_y = size_y // 2
 
-        self.weights = torch.nn.Parameter((1 / (in_channels * out_channels)) * torch.complex(torch.rand(in_channels, out_channels, self.size_y, self.size_x),torch.rand(in_channels, out_channels, self.size_y, self.size_x)))
-        self.biases = torch.nn.Parameter((1 / out_channels) * torch.complex(torch.rand(out_channels, self.size_y, self.size_x),torch.rand(out_channels, self.size_y, self.size_x)))
+        self.weights = torch.nn.Parameter((1 / (in_channels * out_channels)) * torch.complex(torch.rand(in_channels, out_channels, self.size_x, self.size_y),torch.rand(in_channels, out_channels, self.size_x, self.size_y)))
+        self.biases = torch.nn.Parameter((1 / out_channels) * torch.complex(torch.rand(out_channels, self.size_x, self.size_y),torch.rand(out_channels, self.size_x, self.size_y)))
         self.bias = bias
         self.periodic = periodic
 
     def forward(self, x):
         batchsize = x.shape[0]
         if not self.periodic:
-          x = torch.nn.functional.pad(x, [0,self.size_x, 0, self.size_y]) 
+          x = torch.nn.functional.pad(x, [0,self.size_y, 0, self.size_x]) 
 
         x_ft = torch.fft.rfft2(x)
         out_ft = torch.zeros_like(x_ft)
-        out_ft[:, :, :self.size_y, :self.size_x] = torch.einsum("bixy,ioxy->boxy",x_ft[:, :, :self.size_y, :self.size_x], self.weights)
+        out_ft[:, :, :self.size_x, :self.size_y] = torch.einsum("biyx,ioyx->boyx",x_ft[:, :, :self.size_x, :self.size_y], self.weights)
         if self.bias:
-          out_ft[:, :, :self.size_y, :self.size_x] += self.biases
+          out_ft[:, :, :self.size_x, :self.size_y] += self.biases
         x = torch.fft.irfft2(out_ft)
         if not self.periodic:
-          x = x[..., :self.size_y, :self.size_x]
+          x = x[..., :self.size_x, :self.size_y]
         return x
 
