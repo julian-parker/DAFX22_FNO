@@ -1,7 +1,7 @@
 import numpy as np
 from scipy.linalg import expm, sinm, cosm
 from scipy import integrate
-from numpy import sin, cos, conj, cumsum, real, zeros, pi
+from numpy import sin, cos, conj, cumsum, real, zeros, pi, trapz
 from numpy.random import rand
 
 class StringSolver():
@@ -119,17 +119,20 @@ class StringSolver():
 
     def create_random_initial(self):
         # Explicity copy variables
-        l, gmu, Ka4, E, I = self.l, self.gmu, self.Ka4, self.E, self.I
+        l, gmu, Ka4, E, I, xs = self.l, self.gmu, self.Ka4, self.E, self.I, self.xs
         
         fe_x = np.zeros((1, gmu.size)) # zeros(1,length(gmu))
         
-        # Random excitation 
+        # Random excitation
         for mu in range(gmu.size) :
             g = gmu[mu]
-            r = (rand(1)*2-1)
-            fun = lambda x: g*sin(g*x)*r
-            integ = integrate.quad(fun,0,l)
+            r = (rand(1,xs.size)*2-1)
+            fun = g*sin(g*xs)*r
+            integ = trapz(xs,fun)
             fe_x[:,mu] = -1/(E*I)*integ[0]
+            # fun = lambda x: g*sin(g*x)*r
+            # integ = integrate.quad(fun,0,l)
+            # fe_x[:,mu] = -1/(E*I)*integ[0]
             
         return fe_x
 
@@ -174,4 +177,3 @@ class StringSolver():
         
         return t, y_x, y_defl_x
         
-
