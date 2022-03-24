@@ -20,3 +20,7 @@ legacy/Code/PythonWaveEquation/.ipynb_checkpoints/StringEquationFTM-checkpoint.i
 legacy/Notebooks/.ipynb_checkpoints/StringSolver-checkpoint.py
 
 legacy/Notebooks/.ipynb_checkpoints/WaveSolver-checkpoint.py
+
+generators/.ipynb_checkpoints/
+
+generators/__pycache__/

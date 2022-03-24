@@ -42,6 +42,9 @@ index = zeros(Mux*Muy,2);
 index(:,2) = repmat(1:Muy,1,Mux);
 index(:,1) = repelem(1:Mux, Muy);
 
+%[X,Y] = ndgrid(1:Mux,1:Muy);
+%[X(:),Y(:)]
+
 Mu = Mux*Muy;
 mu = 1:Mu;
 mux = index(mu,1);
@@ -95,19 +98,19 @@ fe_xy = zeros(1,length(smu));
 % impulse excitation at (xe,ye)
 fe_x = Ka3(xe,ye);
 
-% Add random excitation 
-for mu = 1:Mu
-    x = 0:1e-3:lx; 
-    y = 0:1e-3:ly; 
-    
-    Kx = 4*cos(lamX(mu).*x); 
-    Ky = cos(lamY(mu).*y);
-
-    funX = 4*cos(lamX(mu).*x).*(rand(1,length(x))*2-1);
-    funY = cos(lamY(mu).*y).*(rand(1,length(y))*2-1);
-
-    fe_x(mu) = trapz(x,funX)*trapz(y,funY);
-end
+% % Add random excitation 
+% for mu = 1:Mu
+%     x = 0:1e-3:lx; 
+%     y = 0:1e-3:ly; 
+%     
+%     Kx = 4*cos(lamX(mu).*x); 
+%     Ky = cos(lamY(mu).*y);
+% 
+%     funX = 4*cos(lamX(mu).*x).*(rand(1,length(x))*2-1);
+%     funY = cos(lamY(mu).*y).*(rand(1,length(y))*2-1);
+% 
+%     fe_x(mu) = trapz(x,funX)*trapz(y,funY);
+% end
 
 
 
@@ -137,8 +140,8 @@ y = (K1(xo,yo)./nmu)*ybar;
 
 % hear it 
 y = real(y); 
-y = y/max(y); 
-sound(y,Fs); 
+% y = y/max(y); 
+% sound(y,Fs); 
 
 %% Simulation - spatial domain 
 
