@@ -25,7 +25,7 @@ class StringSolver():
 
         # Simulation domain
         self.numT = round(dur / T)
-        t = np.linspace(0, dur, num=self.numT, endpoint=True ) # time vector
+        self.t = np.linspace(0, dur, num=self.numT, endpoint=True ) # time vector
         self.numXs = round(l / delta_x)
         xs = np.linspace(0, l, num=self.numXs, endpoint=True) # space vector
         
@@ -144,7 +144,7 @@ class StringSolver():
         xs = self.xs
       
         ## Simulation - state equation 
-        ybar = np.zeros((smu.size, t.size),dtype=complex)
+        ybar = np.zeros((smu.size, self.t.size),dtype=complex)
 
         # Matrix of eigenvalues, As: Frequency domain, Az: discrete-time domain
         As = np.diag(smu)
@@ -153,7 +153,7 @@ class StringSolver():
         # Input at t = 0 --> is realized by an initial value for ybar 
         ybar[:,0] = fe_x
 
-        for k in range(1,t.size) : # 1:length(t)
+        for k in range(1,self.t.size) : # 1:length(t)
             # Process state equation 
             ybar[:,k] = Az@ybar[:,k-1]
         
@@ -161,13 +161,13 @@ class StringSolver():
 
         # create a spatial eigenfunction 
         K1_x = zeros((xs.size, smu.size),dtype=complex) 
-        y_x = zeros((xs.size, t.size),dtype=complex)     
-        y_defl_x = zeros((xs.size, t.size),dtype=complex) 
+        y_x = zeros((xs.size, self.t.size),dtype=complex)     
+        y_defl_x = zeros((xs.size, self.t.size),dtype=complex) 
 
         for xi in range(xs.size) :
             K1_x[xi,:] = K1(xs[xi])/nmu 
             y_x[xi,:] = K1_x[xi,:]@ybar
             y_defl_x[xi,:] = cumsum(y_x[xi,:])*T
         
-        return t, y_x, y_defl_x
+        return y_x, y_defl_x
         
