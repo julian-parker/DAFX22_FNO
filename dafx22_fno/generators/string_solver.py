@@ -5,28 +5,24 @@ from numpy import sin, cos, conj, cumsum, real, zeros, pi, trapz
 from numpy.random import rand
 
 class StringSolver():
-    def __init__(self):
+    def __init__(self
+                ,Fs = 48000             # Temporal sampling frequency
+                ,E = 5.4e9              # String parameters            
+                ,p = 1140               # Physical parameters for a nylon guitar B-string, see (Fletcher & Rossing
+                ,l = 0.65               # 1998), (Trautmann & Rabenstein, 2003)  
+                ,A = 0.5188e-6  
+                ,I = 0.171e-12
+                ,d1 = 8 * 10**-5
+                ,d3 = 1.4 * 10**-5
+                ,Ts = 60.97   
+                ,delta_x = 1e-3         # Spatial step size
+                ):
         super(StringSolver, self).__init__()
 
-        # Basic Parameter Set
-        # Sampling frequency 
-        Fs = 48000 
-        T = 1/Fs
         
-        # String parameters
-        # Physical parameters for a nylon guitar B-string, see (Fletcher & Rossing
-        # 1998), (Trautmann & Rabenstein, 2003)  
-        E = 5.4e9
-        p = 1140       
-        l = 0.65
-        A = 0.5188e-6  
-        I = 0.171e-12
-        d1 = 8 * 10**-5
-        d3 = 1.4 * 10**-5
-        Ts = 60.97     
+        T = 1/Fs
 
         # Simulation domain
-        delta_x = 1e-3
         numXs = round(l / delta_x)
         xs = np.linspace(0, l, num=numXs, endpoint=True) # space vector
         
