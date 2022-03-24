@@ -7,6 +7,7 @@ from numpy.random import rand
 class StringSolver():
     def __init__(self
                 ,Fs = 48000             # Temporal sampling frequency
+                ,dur = 0.1
                 ,E = 5.4e9              # String parameters            
                 ,p = 1140               # Physical parameters for a nylon guitar B-string, see (Fletcher & Rossing
                 ,l = 0.65               # 1998), (Trautmann & Rabenstein, 2003)  
@@ -23,8 +24,10 @@ class StringSolver():
         T = 1/Fs
 
         # Simulation domain
-        numXs = round(l / delta_x)
-        xs = np.linspace(0, l, num=numXs, endpoint=True) # space vector
+        self.numT = round(dur / T)
+        t = np.linspace(0, dur, num=self.numT, endpoint=True ) # time vector
+        self.numXs = round(l / delta_x)
+        xs = np.linspace(0, l, num=self.numXs, endpoint=True) # space vector
         
         # Parameters for vector formulation
         c1 = -p*A/(E*I)
@@ -132,19 +135,14 @@ class StringSolver():
             
         return fe_x
 
-    def solve(self, fe_x, dur):
+    def solve(self, fe_x):
         
         smu, nmu = self.smu, self.nmu
         T = self.T
         l = self.l
         K1 = self.K1
         xs = self.xs
-        
-        # Simulation duration 
-        # dur = 2
-        numT = round(dur / T)
-        t = np.linspace(0, dur, num=numT, endpoint=True ) # time vector
-        
+      
         ## Simulation - state equation 
         ybar = np.zeros((smu.size, t.size),dtype=complex)
 
