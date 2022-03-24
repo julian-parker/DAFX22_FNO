@@ -15,7 +15,8 @@ class StringSolver():
                 ,I = 0.171e-12
                 ,d1 = 8 * 10**-5
                 ,d3 = 1.4 * 10**-5
-                ,Ts = 60.97   
+                ,Ts = 60.97
+                ,Nu = 50   
                 ,delta_x = 1e-3         # Spatial step size
                 ):
         super(StringSolver, self).__init__()
@@ -38,7 +39,6 @@ class StringSolver():
         ## FTM Parameters 
         # Number of modes used for synthesis (influences accuracy, should be adjusted
         # according to the hearing range)
-        Nu = 50  # number of eigenvalues
         nu = np.arange(1, Nu+1) # 1:Nu 
 
         # Wavenumbers 
