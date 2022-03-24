@@ -169,5 +169,5 @@ class StringSolver():
             y_x[xi,:] = K1_x[xi,:]@ybar
             y_defl_x[xi,:] = cumsum(y_x[xi,:])*T
         
-        return y_x, y_defl_x
+        return np.real(y_x), np.real(y_defl_x)
         
