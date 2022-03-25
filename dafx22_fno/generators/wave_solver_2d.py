@@ -1,39 +1,37 @@
 import numpy as np
 from scipy.linalg import expm, sinm, cosm
 from scipy import integrate
-from numpy import sin, cos, conj, cumsum, real, zeros, pi, trapz, arange, vstack, hstack, meshgrid, sqrt, diag, einsum, newaxis
+from numpy import sin, cos, conj, cumsum, real, zeros, pi, trapz, arange, vstack, hstack, meshgrid, sqrt, diag, einsum, newaxis, float32
 from numpy.random import rand
 
 class WaveSolver2D():
-    def __init__(self):
+    def __init__(self
+                ,Fs = 48000 # sampling frequency 
+                ,dur = 0.02 # duration of the simulation              
+                ,lx = .4 # Room Parameters 
+                ,ly = .3
+                ,c0 = 340
+                ,rho = 1.2041
+                ,delta_x = 1e-3 # spatial grid
+                ,damping = 1 # artificial damping factor. Maybe interesting to change during learning or estimation? 
+                ,Mux = 10 ## FTM - Parameters
+                ,Muy = 10  
+                ):
         super(WaveSolver2D, self).__init__()
 
         # Basic Parameter Set
         # Sampling frequency 
-        Fs = 48000 
-        T = 1/Fs
-    
-        # Room Parameters 
-        lx = .4
-        ly = .3
-
-        c0 = 340
-        rho = 1.2041
-
-        # Simulation domain
-        delta_x = 1e-3
-        numXs = round(lx / delta_x)
-        numYs = round(ly / delta_x)
-        xs = np.linspace(0, lx, num=numXs, endpoint=True) # space vector
-        ys = np.linspace(0, ly, num=numYs, endpoint=True) # space vector
         
-        # artificial damping factor. Maybe interesting to change during learning or
-        # estimation? 
-        damping = 1 
+        T = 1/Fs
 
-        ## FTM - Parameters
-        Mux = 10 
-        Muy = 10 
+        self.numT = round(dur / T)
+        self.t = np.linspace(0, dur, num=self.numT, endpoint=True ) # time vector
+
+        self.numXs = round(lx / delta_x)
+        self.numYs = round(ly / delta_x)
+        xs = np.linspace(0, lx, num=self.numXs, endpoint=True) # space vector
+        ys = np.linspace(0, ly, num=self.numYs, endpoint=True) # space vector
+        
 
         # Create index vector. 
         # We have modes in 2 directions x,y but we want to count the eigenvalues
@@ -141,21 +139,16 @@ class WaveSolver2D():
         return fe_xy
         
 
-    def solve(self, fe_x, dur):
+    def solve(self, fe_x):
         ## Copy internal variables
         T = self.T
         smu, nmu = self.smu, self.nmu
         lx, ly = self.lx, self.ly
         xs, ys = self.xs, self.ys
-        
-        # Simulation duration 
-        # dur = 2
-        numT = round(dur / T)
-        t = np.linspace(0, dur, num=numT, endpoint=True ) # time vector
     
         ## Simulation - state equation 
 
-        ybar = zeros((smu.size, t.size),dtype=complex)
+        ybar = zeros((smu.size, self.t.size),dtype=complex)
 
         # Matrix of eigenvalues, As: Frequency domain, Az: discrete-time domain
         As = diag(smu)
@@ -164,7 +157,7 @@ class WaveSolver2D():
         # Input at t = 0 --> is realized by an initial value for ybar 
         ybar[:,0] = fe_x
 
-        for k in range(1,t.size) : #for k = 2:length(t) 
+        for k in range(1,self.t.size) : #for k = 2:length(t) 
             # Process state equation 
             ybar[:,k] = Az@ybar[:,k-1]
         
@@ -179,11 +172,15 @@ class WaveSolver2D():
         
         ## Simulation - spatial domain 
         K1_sp = zeros((xs.size, ys.size, nmu.size),dtype=complex)
-        y_sp = zeros((xs.size, ys.size, t.size),dtype=complex)
+        y_sp = zeros((xs.size, ys.size, self.t.size),dtype=complex)
 
         for xi in range(xs.size) :
             for yi in range(ys.size) :
                 K1_sp[xi,yi,:] = self.K1(xs[xi], ys[yi])/nmu
                 y_sp[xi,yi,:] = K1_sp[xi,yi,:]@ybar    
         
-        return t, y, ybar, y_sp
+        y = float32(real(y))
+        y_bar = float32(real(y_bar))
+        y_sp = float32(real(y_sp))
+
+        return y, ybar, y_sp
