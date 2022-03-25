@@ -5,30 +5,30 @@ from numpy import sin, cos, conj, cumsum, real, zeros, pi, trapz
 from numpy.random import rand
 
 class StringSolver():
-    def __init__(self):
+    def __init__(self
+                ,Fs = 48000             # Temporal sampling frequency
+                ,dur = 0.1
+                ,E = 5.4e9              # String parameters            
+                ,p = 1140               # Physical parameters for a nylon guitar B-string, see (Fletcher & Rossing
+                ,l = 0.65               # 1998), (Trautmann & Rabenstein, 2003)  
+                ,A = 0.5188e-6  
+                ,I = 0.171e-12
+                ,d1 = 8 * 10**-5
+                ,d3 = 1.4 * 10**-5
+                ,Ts = 60.97
+                ,Nu = 50   
+                ,delta_x = 1e-3         # Spatial step size
+                ):
         super(StringSolver, self).__init__()
 
-        # Basic Parameter Set
-        # Sampling frequency 
-        Fs = 48000 
-        T = 1/Fs
         
-        # String parameters
-        # Physical parameters for a nylon guitar B-string, see (Fletcher & Rossing
-        # 1998), (Trautmann & Rabenstein, 2003)  
-        E = 5.4e9
-        p = 1140       
-        l = 0.65
-        A = 0.5188e-6  
-        I = 0.171e-12
-        d1 = 8 * 10**-5
-        d3 = 1.4 * 10**-5
-        Ts = 60.97     
+        T = 1/Fs
 
         # Simulation domain
-        delta_x = 1e-3
-        numXs = round(l / delta_x)
-        xs = np.linspace(0, l, num=numXs, endpoint=True) # space vector
+        self.numT = round(dur / T)
+        self.t = np.linspace(0, dur, num=self.numT, endpoint=True ) # time vector
+        self.numXs = round(l / delta_x)
+        xs = np.linspace(0, l, num=self.numXs, endpoint=True) # space vector
         
         # Parameters for vector formulation
         c1 = -p*A/(E*I)
@@ -39,7 +39,6 @@ class StringSolver():
         ## FTM Parameters 
         # Number of modes used for synthesis (influences accuracy, should be adjusted
         # according to the hearing range)
-        Nu = 50  # number of eigenvalues
         nu = np.arange(1, Nu+1) # 1:Nu 
 
         # Wavenumbers 
@@ -136,21 +135,16 @@ class StringSolver():
             
         return fe_x
 
-    def solve(self, fe_x, dur):
+    def solve(self, fe_x):
         
         smu, nmu = self.smu, self.nmu
         T = self.T
         l = self.l
         K1 = self.K1
         xs = self.xs
-        
-        # Simulation duration 
-        # dur = 2
-        numT = round(dur / T)
-        t = np.linspace(0, dur, num=numT, endpoint=True ) # time vector
-        
+      
         ## Simulation - state equation 
-        ybar = np.zeros((smu.size, t.size),dtype=complex)
+        ybar = np.zeros((smu.size, self.t.size),dtype=complex)
 
         # Matrix of eigenvalues, As: Frequency domain, Az: discrete-time domain
         As = np.diag(smu)
@@ -159,7 +153,7 @@ class StringSolver():
         # Input at t = 0 --> is realized by an initial value for ybar 
         ybar[:,0] = fe_x
 
-        for k in range(1,t.size) : # 1:length(t)
+        for k in range(1,self.t.size) : # 1:length(t)
             # Process state equation 
             ybar[:,k] = Az@ybar[:,k-1]
         
@@ -167,13 +161,13 @@ class StringSolver():
 
         # create a spatial eigenfunction 
         K1_x = zeros((xs.size, smu.size),dtype=complex) 
-        y_x = zeros((xs.size, t.size),dtype=complex)     
-        y_defl_x = zeros((xs.size, t.size),dtype=complex) 
+        y_x = zeros((xs.size, self.t.size),dtype=complex)     
+        y_defl_x = zeros((xs.size, self.t.size),dtype=complex) 
 
         for xi in range(xs.size) :
             K1_x[xi,:] = K1(xs[xi])/nmu 
             y_x[xi,:] = K1_x[xi,:]@ybar
             y_defl_x[xi,:] = cumsum(y_x[xi,:])*T
         
-        return t, y_x, y_defl_x
+        return np.float32(np.real(y_x)), np.float32(np.real(y_defl_x))
         

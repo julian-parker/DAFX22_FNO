@@ -1,10 +1,6 @@
 
 .DS_Store
 
-Notebooks/__pycache__/
-
-Notebooks/.ipynb_checkpoints/
-
 legacy/Code/PythonWaveEquation/.idea/misc.xml
 
 legacy/Code/PythonWaveEquation/.idea/modules.xml
@@ -21,6 +17,5 @@ legacy/Notebooks/.ipynb_checkpoints/StringSolver-checkpoint.py
 
 legacy/Notebooks/.ipynb_checkpoints/WaveSolver-checkpoint.py
 
-generators/.ipynb_checkpoints/
-
-generators/__pycache__/
+*__pycache__*
+*ipynb_checkpoints*
