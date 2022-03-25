@@ -180,7 +180,7 @@ class WaveSolver2D():
                 y_sp[xi,yi,:] = K1_sp[xi,yi,:]@ybar    
         
         y = float32(real(y))
-        y_bar = float32(real(y_bar))
+        ybar = float32(real(ybar))
         y_sp = float32(real(y_sp))
 
         return y, ybar, y_sp
