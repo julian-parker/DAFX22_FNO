@@ -41,6 +41,52 @@ class FNO_RNN_1d(torch.nn.Module):
         x = x.permute(0,2,1)
         return x
 
+class FNO_RNN_1d_block(torch.nn.Module):
+    def __init__(self, in_channels, out_channels, spatial_size, width, depth = 4, block_size = 16, activation = torch.nn.ReLU()):
+        super(FNO_RNN_1d_block, self).__init__()
+
+        self.in_channels = in_channels
+        self.out_channels = out_channels
+        self.width = width
+        self.depth = depth 
+        self.block_size = block_size
+
+        self.in_mapping = torch.nn.Linear(in_channels, self.width)
+
+        self.fourier_conv_layers = torch.nn.ModuleList()
+        for _ in range(self.depth):
+          self.fourier_conv_layers.append(FourierConv2d(self.width, self.width, block_size, spatial_size ))
+
+        self.w = torch.nn.ModuleList()
+        for _ in range(self.depth):
+          self.w.append(torch.nn.Conv2d(self.width, self.width, (1,1)))
+
+        self.activation = activation
+
+        self.out_mapping = torch.nn.Linear(self.width, out_channels)
+
+    def forward(self, x, num_time_steps):
+        num_blocks = num_time_steps // self.block_size
+        x = self.in_mapping(x)
+        output = torch.zeros(x.shape[0], num_time_steps,x.shape[2],self.out_channels).to(x.device)
+        for i in range(num_blocks):
+          #print(x.shape)
+          x = self.cell(x)
+          #print(x.shape)
+          #print(self.out_mapping(x).shape)
+          #print(output[:,i:(i+block_size),:,:].shape)
+          output[:,(i*block_size):((i+1)*block_size),:,:] = self.out_mapping(x)
+
+        return output
+    def cell(self, x):
+        x = x.permute(0, 3, 1, 2)
+        for i in range(self.depth):
+          x1 = self.fourier_conv_layers[i](x)
+          x2 = self.w[i](x)
+          x = self.activation(x1) + x2
+        x = x.permute(0, 2, 3, 1)
+        return x
+
 class FNO_RNN_2d(torch.nn.Module):
     def __init__(self, in_channels, out_channels, spatial_size_x, spatial_size_y, width, depth = 4, activation = torch.nn.ReLU()):
         super(FNO_RNN_1d, self).__init__()
