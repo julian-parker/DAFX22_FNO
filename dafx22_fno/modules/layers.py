@@ -28,10 +28,10 @@ class FourierConv1d(torch.nn.Module):
         out_ft[:, :, :self.size] = torch.einsum("bix,iox->box",x_ft[:, :, :self.size], self.weights)
         if self.bias:
           out_ft[:, :, :self.size] += self.biases
-        x = torch.fft.irfft(out_ft, n=x.size(-1))
+        out = torch.fft.irfft(out_ft, n=x.size(-1))
         if not self.periodic:
-          x = x[..., :-padding]
-        return x
+          out = out[..., :-padding]
+        return out
 
 class FourierConv2d(torch.nn.Module):
     def __init__(self, in_channels, out_channels, size_x, size_y, bias = True, periodic = False):
@@ -61,10 +61,10 @@ class FourierConv2d(torch.nn.Module):
         out_ft[:, :, :self.size_x, :self.size_y] = torch.einsum("bixy,ioxy->boxy",x_ft[:, :, :self.size_x, :self.size_y], self.weights)
         if self.bias:
           out_ft[:, :, :self.size_x, :self.size_y] += self.biases
-        x = torch.fft.irfft2(out_ft)
+        out = torch.fft.irfft2(out_ft)
         if not self.periodic:
-          x = x[..., :self.size_x, :self.size_y]
-        return x
+          out = out[..., :self.size_x, :self.size_y]
+        return out
 
 class FourierConv3d(torch.nn.Module):
     def __init__(self, in_channels, out_channels, size_x, size_y, size_z, bias = True, periodic = False):
@@ -96,7 +96,7 @@ class FourierConv3d(torch.nn.Module):
         out_ft[:, :, :self.size_x, :self.size_y] = torch.einsum("bixyz,ioxyz->boxyz",x_ft[:, :, :self.size_x, :self.size_y, :self.size_z], self.weights)
         if self.bias:
           out_ft[:, :, :self.size_x, :self.size_y, self.size_z] += self.biases
-        x = torch.fft.irfft3(out_ft)
+        out = torch.fft.irfft3(out_ft)
         if not self.periodic:
-          x = x[..., :self.size_x, :self.size_y, :self.size_z]
-        return x
+          out = out[..., :self.size_x, :self.size_y, :self.size_z]
+        return out
