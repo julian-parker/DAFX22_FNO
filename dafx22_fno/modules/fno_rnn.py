@@ -33,13 +33,12 @@ class FNO_RNN_1d(torch.nn.Module):
 
         return output
     def cell(self, x):
-        x = x.permute(0, 2, 1)
+        x_perm = x.permute(0, 2, 1)
         for i in range(self.depth):
-          x1 = self.fourier_conv_layers[i](x)
-          x2 = self.w[i](x)
-          x = self.activation(x1) + x2
-        x = x.permute(0,2,1)
-        return x
+          x1 = self.fourier_conv_layers[i](x_perm)
+          x2 = self.w[i](x_perm)
+          x_out = self.activation(x1) + x2
+        return x_out.permute(0,2,1)
 
 class FNO_RNN_1d_block(torch.nn.Module):
     def __init__(self, in_channels, out_channels, spatial_size, width, depth = 4, block_size = 16, activation = torch.nn.ReLU()):
