@@ -171,16 +171,31 @@ class WaveSolver2D():
         y = real(y)
         
         ## Simulation - spatial domain 
-        K1_sp = zeros((xs.size, ys.size, nmu.size),dtype=complex)
-        y_sp = zeros((xs.size, ys.size, self.t.size),dtype=complex)
-
+        K1_sp = zeros((xs.size, ys.size, nmu.size),dtype=complex) # Eigenfunctions for sound pressure 
+        K2_vx = zeros((xs.size, ys.size, nmu.size),dtype=complex) # Eigenfunctions for particle velocity in x-direction
+        K3_vy = zeros((xs.size, ys.size, nmu.size),dtype=complex) # Eigenfunctions for particle velocity in y-direction 
+        
+        y_sp = zeros((xs.size, ys.size, self.t.size),dtype=complex) # Output sound pressure
+        y_vx = zeros((xs.size, ys.size, self.t.size),dtype=complex) # output particle velocity in x-direction
+        y_vy = zeros((xs.size, ys.size, self.t.size),dtype=complex) # output particle velocity in y-direction
+        
         for xi in range(xs.size) :
             for yi in range(ys.size) :
                 K1_sp[xi,yi,:] = self.K1(xs[xi], ys[yi])/nmu
-                y_sp[xi,yi,:] = K1_sp[xi,yi,:]@ybar    
+                K2_vx[xi,yi,:] = self.K2(xs[xi], ys[yi])/nmu
+                K3_vy[xi,yi,:] = self.K3(xs[xi], ys[yi])/nmu
+                
+                y_sp[xi,yi,:] = K1_sp[xi,yi,:]@ybar
+                y_vx[xi,yi,:] = K2_vx[xi,yi,:]@ybar
+                y_vy[xi,yi,:] = K3_vy[xi,yi,:]@ybar
         
         y = float32(real(y))
         ybar = float32(real(ybar))
         y_sp = float32(real(y_sp))
+        y_vx = float32(real(y_vx))
+        y_vy = float32(real(y_vy))
 
-        return y, ybar, y_sp
+        return y, ybar, y_sp, y_vx, y_vy
+    
+    
+    

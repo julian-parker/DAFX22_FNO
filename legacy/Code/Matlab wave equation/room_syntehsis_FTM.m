@@ -146,19 +146,43 @@ y = real(y);
 %% Simulation - spatial domain 
 
 % create spatial grid; 
+% delta = 1e-3; 
+% xs = linspace(0,lx,50); 
+% ys = linspace(0,ly,50); 
+% 
+% K1_sp = zeros(length(xs), length(ys), Mu);
+% y_sp = zeros(length(xs), length(ys), length(t));
+% 
+% for xi = 1:length(xs) 
+%     for yi = 1:length(ys) 
+%         K1_sp(xi,yi,:) = K1(xs(xi), ys(yi))./nmu;
+%         y_sp(xi,yi,:) = squeeze(K1_sp(xi,yi,:)).'*ybar;
+%     end
+% end
+
+
+
+%% Simulation - spatial domain 
+% create spatial grid; 
 delta = 1e-3; 
 xs = linspace(0,lx,50); 
 ys = linspace(0,ly,50); 
+K1_sp = zeros(length(xs), length(ys), Mu);  % Eigenfunctions for sound pressure 
+K2_vx = zeros(length(xs), length(ys), Mu);  % Eigenfunctions for particle velocity in x-direction 
+K3_vy = zeros(length(xs), length(ys), Mu);  % Eigenfunctions for particle velocity in y-direction 
 
-K1_sp = zeros(length(xs), length(ys), Mu);
-y_sp = zeros(length(xs), length(ys), length(t));
-
+y_sp = zeros(length(xs), length(ys), length(t));    % Output sound pressure
+y_vx = zeros(length(xs), length(ys), length(t));    % output particle velocity in x-direction 
+y_vy = zeros(length(xs), length(ys), length(t));    % output particle velocity in y-direction 
 for xi = 1:length(xs) 
     for yi = 1:length(ys) 
         K1_sp(xi,yi,:) = K1(xs(xi), ys(yi))./nmu;
+        K2_vx(xi,yi,:) = K2(xs(xi), ys(yi))./nmu;
+        K3_vy(xi,yi,:) = K3(xs(xi), ys(yi))./nmu;
+        
         y_sp(xi,yi,:) = squeeze(K1_sp(xi,yi,:)).'*ybar;
+        y_vx(xi,yi,:) = squeeze(K2_vx(xi,yi,:)).'*ybar;
+        y_vy(xi,yi,:) = squeeze(K3_vy(xi,yi,:)).'*ybar;
     end
 end
-
-
 
