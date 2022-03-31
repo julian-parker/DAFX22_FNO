@@ -25,7 +25,7 @@ P.M   = 50;           %               number of expansion terms
 xe  = 0.28;         % m             pluck position
 hi  = 0.03;         % m             initial deflection at pluck position
 xa  = 0.28;         % m             listening position
-xa  = linspace(0,P.ell,100); 
+% xa  = linspace(0,P.ell,100); 
 
 
 tmax = 0.1;         % s             time duration for evaluation 
