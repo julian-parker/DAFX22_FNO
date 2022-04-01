@@ -7,6 +7,7 @@ from scipy.integrate import solve_ivp
 
 class TensionModulatedStringSolver():
     def __init__(self
+                ,dur = 0.1          # s             duration of the simulation
                 ,ell = 1            # m             string length at rest
                 ,A   = 0.19634e-6   # m**2           string cross section area
                 ,I   = 0.02454e-12  # m**4           string moment of intertia
@@ -22,6 +23,7 @@ class TensionModulatedStringSolver():
         mu           = np.arange(1,M+1)                 # index for Fourier-Sine transf.
         self.kmu     = mu*pi/ell              # argument of sine functions
 
+        self.dur = dur
         self.ell = ell
         self.A = A
         self.I = I
@@ -98,9 +100,7 @@ class TensionModulatedStringSolver():
         xa  = np.linspace(0, self.ell, num=100) # 100 positions on the string
         xa  = xa[newaxis,:]
 
-        tmax = 0.1         # s             time duration for evaluation 
-
-        tspan   = [0, tmax]                   # time span for ode
+        tspan   = [0, self.dur]                   # time span for ode
 
         
         #[t1,wb1] = ode45(@(t1,wb1) tensmodstr(t1,wb1,P),tspan,wb0) # solve ode
