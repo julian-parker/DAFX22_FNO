@@ -83,7 +83,7 @@ class FNO_RNN_1d_block(torch.nn.Module):
 
 class FNO_RNN_2d(torch.nn.Module):
     def __init__(self, in_channels, out_channels, spatial_size_x, spatial_size_y, width, depth = 4, activation = torch.nn.ReLU()):
-        super(FNO_RNN_1d, self).__init__()
+        super(FNO_RNN_2d, self).__init__()
 
         self.in_channels = in_channels
         self.out_channels = out_channels
