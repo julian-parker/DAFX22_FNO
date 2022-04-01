@@ -5,7 +5,7 @@ from numpy import sin, cos, conj, cumsum, real, zeros, pi, trapz, arange, vstack
 from numpy.random import rand
 from scipy.integrate import solve_ivp
 
-class TensionModulatedString():
+class TensionModulatedStringSolver():
     def __init__(self
                 ,ell = 1            # m             string length at rest
                 ,A   = 0.19634e-6   # m**2           string cross section area
@@ -17,7 +17,7 @@ class TensionModulatedString():
                 ,Ts0 = 150          # N             string tension
                 ,M   = 50           #               number of expansion terms  
                 ):
-        super(TensionModulatedString, self).__init__()
+        super(TensionModulatedStringSolver, self).__init__()
         
         mu           = np.arange(1,M+1)                 # index for Fourier-Sine transf.
         self.kmu     = mu*pi/ell              # argument of sine functions
