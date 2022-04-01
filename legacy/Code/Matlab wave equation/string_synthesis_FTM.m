@@ -136,7 +136,7 @@ y = y_defl;
 % Sound output
 y = real(y); 
 y = y/max(y);
-sound(y,Fs);
+% sound(y,Fs);
 
 
 %% Simulation - Spatial domain 
@@ -155,3 +155,22 @@ for xi = 1:length(xs)
   %y_defl_x(xi,:) = cumsum(y_x(xi,:))*T;
 end
 
+%%
+y = real(y_x(:,10:10000));
+Y = fft(y, [], 1);
+
+y1 = y(:,1:end-1);
+y2 = y(:,2:end);
+
+R = ybar ./ circshift(ybar,1,2);
+
+imagesc(clip(real(R),[-1 1]*10))
+colorbar
+
+
+function x = clip(x,r)
+
+x(x>r(2)) = r(2);
+x(x<r(1)) = r(1);
+
+end
