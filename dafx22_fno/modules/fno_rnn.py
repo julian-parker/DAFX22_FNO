@@ -8,7 +8,8 @@ class FNO_RNN_1d(torch.nn.Module):
         self.in_channels = in_channels
         self.out_channels = out_channels
         self.width = width
-        self.depth = depth 
+        self.depth = depth
+        self.spatial_size = spatial_size 
 
         self.in_mapping = torch.nn.Linear(in_channels, self.width)
 
@@ -26,7 +27,7 @@ class FNO_RNN_1d(torch.nn.Module):
 
     def forward(self, x, num_time_steps):
         x = self.in_mapping(x)
-        output = torch.zeros(x.shape[0], num_time_steps,x.shape[1],self.out_channels).to(x.device)
+        output = torch.zeros(x.shape[0], num_time_steps,self.spatial_size,self.out_channels).to(x.device)
         for i in range(num_time_steps):
           x = self.cell(x)
           output[:,i,:,:] = self.out_mapping(x)
@@ -70,7 +71,7 @@ class FNO_RNN_1d_block(torch.nn.Module):
         output = torch.zeros(x.shape[0], num_time_steps,x.shape[2],self.out_channels).to(x.device)
         for i in range(num_blocks):
           x = self.cell(x)
-          output[:,(i*block_size):((i+1)*block_size),:,:] = self.out_mapping(x)
+          output[:,(i*self.block_size):((i+1)*self.block_size),:,:] = self.out_mapping(x)
 
         return output
     def cell(self, x):
@@ -88,7 +89,9 @@ class FNO_RNN_2d(torch.nn.Module):
         self.in_channels = in_channels
         self.out_channels = out_channels
         self.width = width
-        self.depth = depth 
+        self.depth = depth
+        self.spatial_size_x = spatial_size_x
+        self.spatial_size_y = spatial_size_y 
 
         self.in_mapping = torch.nn.Linear(in_channels, self.width)
 
@@ -106,7 +109,7 @@ class FNO_RNN_2d(torch.nn.Module):
 
     def forward(self, x, num_time_steps):
         x = self.in_mapping(x)
-        output = torch.zeros(x.shape[0], num_time_steps,x.shape[1],self.out_channels).to(x.device)
+        output = torch.zeros(x.shape[0], num_time_steps,self.spatial_size_x, self.spatial_size_y,self.out_channels).to(x.device)
         for i in range(num_time_steps):
           x = self.cell(x)
           output[:,i,:,:,:] = self.out_mapping(x)
