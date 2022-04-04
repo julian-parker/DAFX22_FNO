@@ -84,18 +84,20 @@ fe_x = zeros(1,length(gmu));
 % fe_x = -1/(E*I)*Ka4(xe); 
 
 % Hann window excitation centered at xe
-for mu = 1:length(gmu)
-    g = gmu(mu);
-    fun = @(x) g.*sin(g.*x)*0.5.*(1 + cos(2*pi/x0.*(x-xe)));
-    fe_x(mu) = -1/(E*I)*integral(fun,xe-x0/2,xe+x0/2); 
-end
+% for mu = 1:length(gmu)
+%     g = gmu(mu);
+%     fun = @(x) g.*sin(g.*x)*0.5.*(1 + cos(2*pi/x0.*(x-xe)));
+%     fe_x(mu) = -1/(E*I)*integral(fun,xe-x0/2,xe+x0/2); 
+% end
 
 % Random excitation 
-% for mu = 1:length(gmu)
-%     g = gmu(mu); 
-%     fun = @(x) g.*sin(g.*x)*(rand*2-1);
-%     fe_x(mu) = -1/(E*I)*integral(fun,0,l); 
-% end    
+for mu = 1:length(gmu)
+    g = gmu(mu); 
+    fun = g.*sin(g.*x).*(rand(1,length(x))*2-1);
+    fe_x(mu) = -1/(E*I)*trapz(x,fun);
+    %fun = @(x) g.*sin(g.*x)*(rand*2-1);
+    %fe_x(mu) = -1/(E*I)*integral(fun,0,l); 
+end    
 
 %% Simulation - state equation 
 
