@@ -146,26 +146,32 @@ delta_x = 1e-3;
 xs = 0:1e-3:l;
 
 K1_x = zeros(length(xs), 2*Nu); 
-y_x = zeros(length(xs), length(t));     
-%y_defl_x = zeros(length(xs), length(t)); 
+K2_x = zeros(length(xs), 2*Nu); 
+y_x = zeros(length(xs), length(t));
+y_defl_x = zeros(length(xs), length(t)); 
 
 for xi = 1:length(xs) 
   K1_x(xi,:) = K1(xs(xi))./nmu; 
+  K2_x(xi,:) = K2(xs(xi))./nmu; 
   y_x(xi,:) = K1_x(xi,:)*ybar;
-  %y_defl_x(xi,:) = cumsum(y_x(xi,:))*T;
+  y_defl_x(xi,:) = cumsum(y_x(xi,:))*T;
 end
 
-%%
-y = real(y_x(:,10:10000));
-Y = fft(y, [], 1);
+%% Recover eigenvalues from spatial output
+y = real([y_x(:,10:3000);y_defl_x(:,10:3000)]);
 
 y1 = y(:,1:end-1);
 y2 = y(:,2:end);
 
-R = ybar ./ circshift(ybar,1,2);
-
-imagesc(clip(real(R),[-1 1]*10))
-colorbar
+AA = y1 / y2; % recover state transition matrix
+poles = eig(AA); % eigenvalues are poles
+figure(); hold on; grid on;
+az = diag(Az);
+scatter(real(az),imag(az),'o')
+scatter(real(poles),imag(poles),'x')
+xlabel('Real part')
+ylabel('Imaginary part')
+legend({'True poles','Recovered poles'})
 
 
 function x = clip(x,r)
