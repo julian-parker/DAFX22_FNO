@@ -158,9 +158,11 @@ for xi = 1:length(xs)
 end
 
 %% Recover eigenvalues from spatial output
+% extract time frame and combine velocity and deflection 
 y = real([y_x(:,10:3000);y_defl_x(:,10:3000)]);
 
-y1 = y(:,1:end-1);
+% consecutive time steps
+y1 = y(:,1:end-1); 
 y2 = y(:,2:end);
 
 AA = y1 / y2; % recover state transition matrix
