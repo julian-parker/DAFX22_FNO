@@ -1,3 +1,4 @@
+from tkinter import W
 import numpy as np
 from scipy.linalg import expm, sinm, cosm
 from scipy import integrate
@@ -8,6 +9,7 @@ from scipy.integrate import solve_ivp
 class TensionModulatedStringSolver():
     def __init__(self
                 ,Fs  = 48000        # 1/s           Temporal sampling frequency
+                ,delta_x = 1e-2
                 ,dur = 0.1          # s             duration of the simulation
                 ,ell = 1            # m             string length at rest
                 ,A   = 0.19634e-6   # m**2           string cross section area
@@ -25,6 +27,7 @@ class TensionModulatedStringSolver():
         self.kmu     = mu*pi/ell              # argument of sine functions
 
         self.Fs = Fs
+        self.delta_x = delta_x
         self.dur = dur
         self.ell = ell
         self.A = A
@@ -34,7 +37,14 @@ class TensionModulatedStringSolver():
         self.d1 = d1
         self.d3 = d3
         self.Ts0 = Ts0
-        self.M = M       
+        self.M = M 
+        
+        self.xa  = np.arange(0, self.ell, self.delta_x) 
+        self.xa  = self.xa[newaxis,:]
+        self.numXs = len(self.xa)
+        
+        self.t_eval = np.linspace(0, self.dur, round(self.dur * self.Fs))
+        self.numT = len(self.t_eval)
         
     def create_pluck(self, xe_rel, hi):
         kmu = self.kmu
@@ -56,7 +66,7 @@ class TensionModulatedStringSolver():
         return fe_xy
         
 
-    def tensmodstr(self,t,wb):
+    def tensmodstr(self,t1,wb):
 
         # extract parameter values from self
         ell     = self.ell
@@ -98,22 +108,21 @@ class TensionModulatedStringSolver():
         ## Copy internal variables
         kmu = self.kmu
         
-        # xa  = 0.28         # m             listening position
-        xa  = np.linspace(0, self.ell, num=100) # 100 positions on the string
-        xa  = xa[newaxis,:]
-
         tspan   = [0, self.dur]                   # time span for ode
-        t_eval = np.linspace(0, self.dur, round(self.dur * self.Fs))
         
         #[t1,wb1] = ode45(@(t1,wb1) tensmodstr(t1,wb1,P),tspan,wb0) # solve ode
-        vdp1 = lambda t1, wb1: self.tensmodstr(t1,wb1)
-        sol = solve_ivp (vdp1, tspan, wb0, t_eval = t_eval)
+        sol = solve_ivp (self.tensmodstr, tspan, wb0, t_eval = self.t_eval)
         t1 = sol.t
         wb1 = sol.y
+        wb2 = np.zeros(wb1.shape)
+        for i in range(wb2.shape[1]):
+            wb2[:,i] = self.tensmodstr(t1,wb1[:,i])
 
         yb1 = wb1[:self.M,:].transpose()   # solution for the FS-transform of the deflection
-
+        yb2 = wb2[:self.M,:].transpose()
         # inverse Fourier-Sine transformation
-        y1      = yb1@sin(kmu[:,newaxis]*xa) * 2/self.ell
+        y1    = yb1@sin(kmu[:,newaxis]*self.xa) * 2/self.ell
+        y1dot = yb2@sin(kmu[:,newaxis]*self.xa) * 2/self.ell
+        y1dot /= self.Fs
 
-        return t1, y1
+        return y1, y1dot
