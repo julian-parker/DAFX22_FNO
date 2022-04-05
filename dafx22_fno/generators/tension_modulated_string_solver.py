@@ -56,7 +56,6 @@ class TensionModulatedStringSolver():
 
         zb0     = zeros((self.M))               # initial condition for derivative 
         wb0     = np.concatenate((yb0, zb0))    # initial condition for ode   
-
         
         return wb0
 
@@ -80,8 +79,12 @@ class TensionModulatedStringSolver():
         M       = self.M
 
         # extract yb and zb from wb
-        yb      = wb[:M]
-        zb      = wb[M:2*M]
+        if wb.ndim == 1 :
+            yb      = wb[:M]
+            zb      = wb[M:2*M]
+        elif wb.ndim == 2 :
+            yb      = wb[:,:M].transpose()
+            zb      = wb[:,M:2*M].transpose()
 
         # set up vectors and matrices
         mu      = np.arange(1,M+1)
@@ -92,15 +95,30 @@ class TensionModulatedStringSolver():
         M2      = diag(mu**2)
 
         # calculate additional string tension Ts1
-        Ts1     = E*A*pi**2/ell**4 * yb[newaxis,:]@M2@yb 
-
+        
+        if wb.ndim == 1 :
+            Ts1     = E*A*pi**2/ell**4 * yb[newaxis,:]@M2@yb 
+        elif wb.ndim == 2 :
+            Ts1     = E*A*pi**2/ell**4 * yb.transpose()@M2@yb 
+    
         # calculate first order derivatives
 
         dyb_dt  = zb
         dzb_dt  = - Mz@zb - My@yb      # linear terms
-        dzb_dt  = dzb_dt - Ts1*M1@yb   # nonlinear term
-        dwb_dt  = np.concatenate((dyb_dt, dzb_dt))
         
+        if wb.ndim == 1 :
+            dzb_dt  = dzb_dt - M1@yb*Ts1   # nonlinear term
+        elif wb.ndim == 2 :
+            print(M1.shape)
+            print(Ts1.shape)
+            print(dzb_dt.shape)
+            dzb_dt  = dzb_dt - M1@yb@Ts1   # nonlinear term
+            
+        dwb_dt  = np.concatenate((dyb_dt, dzb_dt))
+            
+        if wb.ndim == 2 :
+            print(dwb_dt.shape)
+            
         return dwb_dt
         
 
@@ -115,9 +133,10 @@ class TensionModulatedStringSolver():
         t1 = sol.t
         wb1 = sol.y
         wb2 = np.zeros(wb1.shape)
-        for i in range(wb2.shape[1]):
-            wb2[:,i] = self.tensmodstr(t1,wb1[:,i])
-
+        # for i in range(wb2.shape[1]):
+            # wb2[:,i] = self.tensmodstr(t1,wb1[:,i])
+        wb2 = self.tensmodstr(t1,wb1)
+        
         yb1 = wb1[:self.M,:].transpose()   # solution for the FS-transform of the deflection
         yb2 = wb2[:self.M,:].transpose()
         # inverse Fourier-Sine transformation
