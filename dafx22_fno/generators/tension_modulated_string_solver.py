@@ -40,9 +40,9 @@ class TensionModulatedStringSolver():
         self.M = M 
         
         self.xa  = np.arange(0, self.ell, self.delta_x) 
-        self.xa  = self.xa[newaxis,:]
         self.numXs = len(self.xa)
-        
+        self.xa  = self.xa[newaxis,:]
+      
         self.t_eval = np.linspace(0, self.dur, round(self.dur * self.Fs))
         self.numT = len(self.t_eval)
         
