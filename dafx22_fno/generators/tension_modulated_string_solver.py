@@ -125,4 +125,4 @@ class TensionModulatedStringSolver():
         y1dot = yb2@sin(kmu[:,newaxis]*self.xa) * 2/self.ell
         y1dot /= self.Fs
 
-        return y1, y1dot
+        return np.float32(y1.transpose()), np.float32(y1dot.transpose())
