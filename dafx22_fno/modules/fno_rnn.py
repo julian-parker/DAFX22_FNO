@@ -34,10 +34,10 @@ class FNO_RNN_1d(torch.nn.Module):
 
         return output
     def cell(self, x):
-        x_perm = x.permute(0, 2, 1)
+        x_out = x.permute(0, 2, 1)
         for i in range(self.depth):
-          x1 = self.fourier_conv_layers[i](x_perm)
-          x2 = self.w[i](x_perm)
+          x1 = self.fourier_conv_layers[i](x_out)
+          x2 = self.w[i](x_out)
           x_out = self.activation(x1) + x2
         return x_out.permute(0,2,1)
 
@@ -75,10 +75,10 @@ class FNO_RNN_1d_block(torch.nn.Module):
 
         return output
     def cell(self, x):
-        x_perm = x.permute(0, 3, 1, 2)
+        x_out = x.permute(0, 3, 1, 2)
         for i in range(self.depth):
-          x1 = self.fourier_conv_layers[i](x_perm)
-          x2 = self.w[i](x_perm)
+          x1 = self.fourier_conv_layers[i](x_out)
+          x2 = self.w[i](x_out)
           x_out = self.activation(x1) + x2
         return x_out.permute(0, 2, 3, 1)
 
@@ -116,9 +116,9 @@ class FNO_RNN_2d(torch.nn.Module):
 
         return output
     def cell(self, x):
-        x_perm = x.permute(0, 3, 1, 2)
+        x_out = x.permute(0, 3, 1, 2)
         for i in range(self.depth):
-          x1 = self.fourier_conv_layers[i](x_perm)
-          x2 = self.w[i](x_perm)
+          x1 = self.fourier_conv_layers[i](x_out)
+          x2 = self.w[i](x_out)
           x_out = self.activation(x1) + x2
         return x_out.permute(0,2,3,1)
