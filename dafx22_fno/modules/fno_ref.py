@@ -50,6 +50,7 @@ class FNO_Markov_1d(torch.nn.Module):
             x2 = self.w[i](x)
             x = x1 + x2
             x = F.gelu(x)
+        x = x[..., :-self.padding] # pad the domain if input is non-periodic
         x = x.permute(0, 2, 1)
         x = self.fc1(x)
         x = F.gelu(x)
