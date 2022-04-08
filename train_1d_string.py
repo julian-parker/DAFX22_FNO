@@ -18,7 +18,7 @@ num_variations = 1024
 validation_split = 0.1
 
 width = 16
-epochs = 2500
+epochs = 5000
 batch_size = 350
 device = 'cuda'
 
