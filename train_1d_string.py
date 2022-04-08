@@ -25,7 +25,7 @@ device = 'cuda'
 num_example_timesteps = 500
 
 #######################################################################################################################
-stringSolver = StringSolver(dur = dur, delta_x = delta_x, d1 = d1)
+stringSolver = StringSolver(dur = dur, Fs = fs, delta_x = delta_x, d1 = d1)
 training_input = torch.zeros((num_variations,1,stringSolver.numXs,2))
 training_output = torch.zeros((num_variations,stringSolver.numT -1 ,stringSolver.numXs,2))
 for i in range(num_variations):
@@ -120,7 +120,7 @@ with open(directory + "/validation.txt", 'w') as f:
 #######################################################################################################################
 
 dur = (num_example_timesteps+1)/fs
-stringSolver = StringSolver(dur = dur, delta_x = delta_x, d1 = d1)
+stringSolver = StringSolver(dur = dur, Fs = fs,delta_x = delta_x, d1 = d1)
 
 fe_x = stringSolver.create_pluck(0.49)
 y_x, y_defl_x = stringSolver.solve(fe_x)
