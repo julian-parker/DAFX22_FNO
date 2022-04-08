@@ -135,7 +135,7 @@ fig = plt.figure()
 plt.rcParams.update({
     "text.usetex": True,
     "font.family": "serif",
-    "font.sans-serif": ["Computer Modern Roman"]})
+    "font.sans-serif": ["Times"]})
 gs = fig.add_gridspec(1, 4, hspace=0, wspace=0.05)
 axs = gs.subplots(sharex='row', sharey=True)
 axs[0].imshow(output_sequence_gru[0,:,:,0].detach().cpu().numpy(),cmap = 'Greys', aspect = 'auto')
