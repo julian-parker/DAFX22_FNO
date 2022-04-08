@@ -80,7 +80,7 @@ class FNO_Markov_2d(torch.nn.Module):
 
         self.fourier_conv_layers = torch.nn.ModuleList()
         for _ in range(self.depth):
-          self.fourier_conv_layers.append(FourierConv2d(self.width, self.width, spatial_size_x, spatial_size_y, bias = False ))
+          self.fourier_conv_layers.append(FourierConv2d(self.width, self.width, spatial_size_x, spatial_size_y, bias = False, periodic = True))
 
         self.w = torch.nn.ModuleList()
         for _ in range(self.depth):
