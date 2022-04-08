@@ -9,17 +9,17 @@ import time
 from datetime import datetime
 import os
 
-dur = 0.002
+dur = 0.0025
 fs = 48000
 delta_x = 5e-3
 d1 = 1e-1
 
-num_variations = 512
+num_variations = 1024
 validation_split = 0.1
 
 width = 16
-epochs = 10
-batch_size = 256
+epochs = 2500
+batch_size = 350
 device = 'cuda'
 
 num_example_timesteps = 500
