@@ -27,7 +27,7 @@ class FNO_Markov_1d(torch.nn.Module):
 
         self.fourier_conv_layers = torch.nn.ModuleList()
         for _ in range(self.depth):
-          self.fourier_conv_layers.append(FourierConv1d(self.width, self.width, spatial_size ))
+          self.fourier_conv_layers.append(FourierConv1d(self.width, self.width, spatial_size, bias = False))
 
         self.w = torch.nn.ModuleList()
         for _ in range(self.depth):
@@ -80,7 +80,7 @@ class FNO_Markov_2d(torch.nn.Module):
 
         self.fourier_conv_layers = torch.nn.ModuleList()
         for _ in range(self.depth):
-          self.fourier_conv_layers.append(FourierConv2d(self.width, self.width, spatial_size_x, spatial_size_y ))
+          self.fourier_conv_layers.append(FourierConv2d(self.width, self.width, spatial_size_x, spatial_size_y, bias = False ))
 
         self.w = torch.nn.ModuleList()
         for _ in range(self.depth):
@@ -117,3 +117,4 @@ class FNO_Markov_2d(torch.nn.Module):
         gridy = torch.tensor(np.linspace(0, 1, size_y), dtype=torch.float)
         gridy = gridy.reshape(1, 1, size_y, 1).repeat([batchsize, size_x, 1, 1])
         return torch.cat((gridx, gridy), dim=-1).to(device)
+
