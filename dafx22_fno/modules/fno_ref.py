@@ -87,11 +87,10 @@ class FNO_Markov_2d(torch.nn.Module):
           self.w.append(torch.nn.Conv2d(self.width, self.width, (1, 1)))
 
     def forward(self, x, num_time_steps):
-        x = self.in_mapping(x)
         output = torch.zeros(x.shape[0], num_time_steps,self.spatial_size_x, self.spatial_size_y,self.out_channels).to(x.device)
         for i in range(num_time_steps):
           x = self.cell(x)
-          output[:,i,:,:,:] = self.out_mapping(x)
+          output[:,i,:,:,:] = x
         return output
     def cell(self, x):
         grid = self.get_grid(x.shape, x.device)
