@@ -138,7 +138,7 @@ plt.rcParams.update({
     "text.usetex": True,
     "font.family": "serif",
     "font.size": 10,
-    "font.sans-serif": ["Times"]})
+    "font.serif": ["Times"]})
 gs = fig.add_gridspec(1, 4, hspace=0, wspace=0.05)
 
 axs = gs.subplots(sharex='row', sharey=True)
