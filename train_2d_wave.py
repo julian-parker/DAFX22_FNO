@@ -38,7 +38,7 @@ for i in range(num_variations):
     training_input[i,:,:,:,:] = torch.tensor(np.stack([y_sp[:,:,0], y_vx[:,:,0], y_vy[:,:,0]], axis = -1 )).unsqueeze(0)
     training_output[i,:,:,:,:] = torch.tensor(np.stack([y_sp[:,:,1:].transpose(2,0,1), y_vx[:,:,1:].transpose(2,0,1), y_vy[:,:,1:].transpose(2,0,1)], axis = -1 )).unsqueeze(0)
     
-normalization_multiplier = 1/torch.std(training_input, dim = (0,1,2,3))
+normalization_multiplier = 1/torch.std(training_output, dim = (0,1,2,3))
 training_input *= normalization_multiplier
 training_output *= normalization_multiplier
 
@@ -130,8 +130,8 @@ solver = WaveSolver2D(dur = dur, Fs = fs, lx = room_size, ly = room_size, spatia
 fe_x = solver.create_impulse(0.5,0.1)
 _,_,y_x, y_vx, y_vy = solver.solve(fe_x)
 model_input = torch.tensor(np.stack([y_x[:,:,0], y_vx[:,:,0], y_vy[:,:,0]], axis = -1 )).unsqueeze(0).to(device)
-model_input *= 1 / model_input.std(dim = (0,1,2,3))
-y_x *= 1 / model_input.std().cpu().numpy()
+model_input *= normalization_multiplier
+y_x *= normalization_multiplier[0]
 output_sequence_gru = model_gru(model_input, num_example_timesteps)
 output_sequence_rnn = model_rnn(model_input, num_example_timesteps)
 output_sequence_ref = model_ref(model_input, num_example_timesteps)
