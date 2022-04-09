@@ -8,7 +8,7 @@ from dafx22_fno.modules.fno_ref import FNO_Markov_2d
 import matplotlib.pyplot as plt
 
 dur = 0.0007
-num_variations = 1024
+num_variations = 512 #1024
 validation_split = 0.1
 
 fs = 48000
