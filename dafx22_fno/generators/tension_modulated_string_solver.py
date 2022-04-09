@@ -11,14 +11,14 @@ class TensionModulatedStringSolver():
                 ,Fs  = 48000        # 1/s           Temporal sampling frequency
                 ,delta_x = 1e-2
                 ,dur = 0.1          # s             duration of the simulation
-                ,ell = 1            # m             string length at rest
-                ,A   = 0.19634e-6   # m**2           string cross section area
-                ,I   = 0.02454e-12  # m**4           string moment of intertia
-                ,rho = 7800         # kg/m**3        string density
-                ,E   = 190e9        # Pa            string elasticity
+                ,ell = 0.65         # m             string length at rest
+                ,A   = 0.5188e-6   # m**2           string cross section area
+                ,I   = 0.171e-12  # m**4           string moment of intertia
+                ,rho = 1140         # kg/m**3        string density
+                ,E   = 5.4e9        # Pa            string elasticity
                 ,d1  = 4e-3         # kg/(ms)       string frequ. independent loss
                 ,d3  = 6e-5         # kg m/s        string frequ. dependent loss
-                ,Ts0 = 150          # N             string tension
+                ,Ts0 = 60.97         # N             string tension
                 ,M   = 50           #               number of expansion terms  
                 ):
         super(TensionModulatedStringSolver, self).__init__()
