@@ -27,7 +27,7 @@ class FNO_Markov_1d(torch.nn.Module):
 
         self.fourier_conv_layers = torch.nn.ModuleList()
         for _ in range(self.depth):
-          self.fourier_conv_layers.append(SpectralConv1d(self.width, self.width, modes = 20))
+          self.fourier_conv_layers.append(SpectralConv1d(self.width, self.width, modes1 = 20))
 
         self.w = torch.nn.ModuleList()
         for _ in range(self.depth):
