@@ -8,8 +8,8 @@ class WaveSolver2D():
     def __init__(self
                 ,Fs = 48000 # sampling frequency 
                 ,dur = 0.02 # duration of the simulation              
-                ,lx = .4 # Room Parameters 
-                ,ly = .3
+                ,lx = 1 # Room Parameters 
+                ,ly = 1
                 ,c0 = 340
                 ,rho = 1.2041
                 ,delta_x = 1e-3 # spatial grid
