@@ -77,7 +77,7 @@ for ep in range(epochs):
     pred_ref = model_ref(model_input, num_time_steps = training_output.shape[1])
     loss_ref = torch.log10(torch.nn.functional.mse_loss(pred_ref, output))
     loss_ref.backward()
-    torch.nn.utils.clip_grad_norm_(params, 1)
+    torch.nn.utils.clip_grad_norm_(params, 0.5)
     optimizer.step()
     scheduler.step()
   loss_history[ep,0] = np.power(10,loss_gru.detach().cpu().numpy())
@@ -137,7 +137,9 @@ plt.rcParams.update({
     "font.family": "serif",
     "font.sans-serif": ["Times"]})
 gs = fig.add_gridspec(1, 4, hspace=0, wspace=0.05)
-axs = gs.subplots(sharex='row', sharey=True)
+fig_width = 237/72.27 # Latex columnwidth expressed in inches
+figsize = (fig_width, fig_width * 0.618)
+axs = gs.subplots(sharex='row', sharey=True, figsize=figsize)
 axs[0].imshow(output_sequence_gru[0,:,:,0].detach().cpu().numpy(),cmap = 'Greys', aspect = 'auto')
 axs[1].imshow(output_sequence_rnn[0,:,:,0].detach().cpu().numpy(),cmap = 'Greys', aspect = 'auto')
 axs[2].imshow(output_sequence_ref[0,:,:,0].detach().cpu().numpy(),cmap = 'Greys', aspect = 'auto')
