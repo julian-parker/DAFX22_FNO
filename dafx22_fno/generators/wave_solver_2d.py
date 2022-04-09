@@ -14,6 +14,7 @@ class WaveSolver2D():
                 ,rho = 1.2041
                 ,spatial_delta = 1e-3 # spatial grid
                 ,damping = 1 # artificial damping factor. Maybe interesting to change during learning or estimation? 
+                ,modes = 10
                 ):
         super(WaveSolver2D, self).__init__()
 
@@ -22,8 +23,8 @@ class WaveSolver2D():
         
         T = 1/Fs
 
-        Mux = int(lx / spatial_delta) // 2## FTM - Parameters
-        Muy = int(ly / spatial_delta) // 2  
+        Mux = modes## FTM - Parameters
+        Muy = modes  
 
         self.numT = round(dur / T)
         self.t = np.linspace(0, dur, num=self.numT, endpoint=True ) # time vector
