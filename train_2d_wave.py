@@ -136,10 +136,11 @@ output_sequence_gru = model_gru(model_input, num_example_timesteps)
 output_sequence_rnn = model_rnn(model_input, num_example_timesteps)
 output_sequence_ref = model_ref(model_input, num_example_timesteps)
 
-fig_width = 2 * 237/72.27 # Latex columnwidth expressed in inches
-figsize = (fig_width, fig_width * 0.74)
+fig_width = 237/72.27 # Latex columnwidth expressed in inches
+figsize = (fig_width, fig_width * 0.75)
 fig = plt.figure(figsize = figsize)
 plt.rcParams.update({
+    'axes.titlesize': 'small',
     "text.usetex": True,
     "font.family": "serif",
     "font.size": 10,
@@ -161,12 +162,12 @@ axs[2,3].imshow(y_x[...,display_timestep + 1].transpose()                       
 
 axs[0,0].set(title = 'FGRU')
 axs[0,1].set(title = 'FRNN')
-axs[0,2].set(title = 'Ref')
+axs[0,2].set(title = 'Ref.')
 axs[0,3].set(title = 'Truth')
 
-axs[0,0].set(ylabel = "t=0")
-axs[1,0].set(ylabel = f"t={display_timestep // 2}")
-axs[2,0].set(ylabel = f"t={display_timestep}")
+axs[0,0].set(ylabel = "t = 0")
+axs[1,0].set(ylabel = f"t = {display_timestep // 2}")
+axs[2,0].set(ylabel = f"t = {display_timestep}")
 for i in range(len(axs)):
     for j in range(len(axs[0])):
         axs[i,j].label_outer()

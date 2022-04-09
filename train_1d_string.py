@@ -22,7 +22,7 @@ epochs = 5000
 batch_size = 350
 device = 'cuda'
 
-num_example_timesteps = 500
+num_example_timesteps = 1000
 
 #######################################################################################################################
 stringSolver = StringSolver(dur = dur, Fs = fs, delta_x = delta_x, d1 = d1)
@@ -132,14 +132,16 @@ output_sequence_rnn = model_rnn(model_input, num_example_timesteps)
 output_sequence_ref = model_ref(model_input, num_example_timesteps)
 
 fig_width = 237/72.27 # Latex columnwidth expressed in inches
-figsize = (fig_width, fig_width * 0.618)
+figsize = (fig_width, fig_width)
 fig = plt.figure(figsize = figsize)
 plt.rcParams.update({
+    'axes.titlesize': 'small',
     "text.usetex": True,
     "font.family": "serif",
     "font.size": 10,
     "font.serif": ["Times"]})
 gs = fig.add_gridspec(1, 4, hspace=0, wspace=0.05)
+
 
 axs = gs.subplots(sharex='row', sharey=True)
 axs[0].imshow(output_sequence_gru[0,:,:,0].detach().cpu().numpy(),cmap = 'Greys', aspect = 'auto')
@@ -147,12 +149,15 @@ axs[1].imshow(output_sequence_rnn[0,:,:,0].detach().cpu().numpy(),cmap = 'Greys'
 axs[2].imshow(output_sequence_ref[0,:,:,0].detach().cpu().numpy(),cmap = 'Greys', aspect = 'auto')
 axs[3].imshow(y_x[:,1:].transpose()                              ,cmap = 'Greys', aspect = 'auto')
 
+axs[0].set_yticks([])
+axs[0].set_yticklabels([])
+
 axs[0].set(title = 'FGRU')
 axs[1].set(title = 'FRNN')
 axs[2].set(title = 'Ref')
 axs[3].set(title = 'Truth')
 
-axs[0].set(ylabel = "t(samples)")
+axs[0].set(ylabel = " $\leftarrow$ t / samples")
 for ax in axs:
     ax.label_outer()
     ax.set_xticks([])
