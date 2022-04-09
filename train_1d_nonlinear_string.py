@@ -14,12 +14,12 @@ fs = 48000
 delta_x = 5e-3
 d1 = 1e-1
 
-num_variations = 512 #1024
+num_variations = 1024
 max_pluck_deflection = 1e-1
 validation_split = 0.1
 
 width = 16
-epochs = 1000 #5000
+epochs = 5000
 batch_size = 350
 device = 'cuda'
 
@@ -127,7 +127,7 @@ stringSolver = TensionModulatedStringSolver(dur = dur, Fs = fs,delta_x = delta_x
 fe_x = stringSolver.create_pluck(0.49, max_pluck_deflection)
 y_x, y_defl_x = stringSolver.solve(fe_x)
 model_input = torch.tensor(np.stack([y_x[:,0], y_defl_x[:,0]], axis = -1 )).unsqueeze(0).to(device)
-model_input *= 1 / model_input.std()
+model_input *= 1 / model_input.std(dim=(0,1,2))
 y_x *= 1 / model_input.std().cpu().numpy()
 output_sequence_gru = model_gru(model_input, num_example_timesteps)
 output_sequence_rnn = model_rnn(model_input, num_example_timesteps)
@@ -152,11 +152,11 @@ axs[3].imshow(y_x[:,1:].transpose()                              ,cmap = 'Greys'
 axs[0].set(title = 'FGRU')
 axs[1].set(title = 'FRNN')
 axs[2].set(title = 'Ref')
-axs[3].set(title = 'Ground Truth')
+axs[3].set(title = 'Truth')
 
 axs[0].set(ylabel = "t(samples)")
 for ax in axs:
     ax.label_outer()
     ax.set_xticks([])
     
-plt.savefig(directory + "/1d_string_outputs.pdf")
+plt.savefig(directory + "/1d_nonlinear_string_outputs.pdf",bbox_inches='tight')

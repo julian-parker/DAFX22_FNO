@@ -37,7 +37,7 @@ for i in range(num_variations):
     y_x, y_defl_x = stringSolver.solve(fe_x)
     training_input[i,:,:,:] = torch.tensor(np.stack([y_x[:,0], y_defl_x[:,0]], axis = -1 )).unsqueeze(0)
     training_output[i,:,:,:] = torch.tensor(np.stack([y_x[:,1:].transpose(), y_defl_x[:,1:].transpose()], axis = -1 )).unsqueeze(0)
-normalization_multiplier = 1/torch.std(training_input)
+normalization_multiplier = 1/torch.std(training_input, dim=(0,1,2))
 training_input *= normalization_multiplier
 training_output *= normalization_multiplier
 
@@ -125,7 +125,7 @@ stringSolver = StringSolver(dur = dur, Fs = fs,delta_x = delta_x, d1 = d1)
 fe_x = stringSolver.create_pluck(0.49)
 y_x, y_defl_x = stringSolver.solve(fe_x)
 model_input = torch.tensor(np.stack([y_x[:,0], y_defl_x[:,0]], axis = -1 )).unsqueeze(0).to(device)
-model_input *= 1 / model_input.std()
+model_input *= 1 / model_input.std(dim=(0,1,2))
 y_x *= 1 / model_input.std().cpu().numpy()
 output_sequence_gru = model_gru(model_input, num_example_timesteps)
 output_sequence_rnn = model_rnn(model_input, num_example_timesteps)
@@ -150,11 +150,11 @@ axs[3].imshow(y_x[:,1:].transpose()                              ,cmap = 'Greys'
 axs[0].set(title = 'FGRU')
 axs[1].set(title = 'FRNN')
 axs[2].set(title = 'Ref')
-axs[3].set(title = 'Ground Truth')
+axs[3].set(title = 'Truth')
 
 axs[0].set(ylabel = "t(samples)")
 for ax in axs:
     ax.label_outer()
     ax.set_xticks([])
     
-plt.savefig(directory + "/1d_string_outputs.pdf")
+plt.savefig(directory + "/1d_string_outputs.pdf",bbox_inches='tight')
