@@ -131,15 +131,17 @@ output_sequence_gru = model_gru(model_input, num_example_timesteps)
 output_sequence_rnn = model_rnn(model_input, num_example_timesteps)
 output_sequence_ref = model_ref(model_input, num_example_timesteps)
 
-fig = plt.figure()
+fig_width = 237/72.27 # Latex columnwidth expressed in inches
+figsize = (fig_width, fig_width * 0.618)
+fig = plt.figure(figsize = figsize)
 plt.rcParams.update({
     "text.usetex": True,
     "font.family": "serif",
+    "font.size": "10",
     "font.sans-serif": ["Times"]})
 gs = fig.add_gridspec(1, 4, hspace=0, wspace=0.05)
-fig_width = 237/72.27 # Latex columnwidth expressed in inches
-figsize = (fig_width, fig_width * 0.618)
-axs = gs.subplots(sharex='row', sharey=True, figsize=figsize)
+
+axs = gs.subplots(sharex='row', sharey=True)
 axs[0].imshow(output_sequence_gru[0,:,:,0].detach().cpu().numpy(),cmap = 'Greys', aspect = 'auto')
 axs[1].imshow(output_sequence_rnn[0,:,:,0].detach().cpu().numpy(),cmap = 'Greys', aspect = 'auto')
 axs[2].imshow(output_sequence_ref[0,:,:,0].detach().cpu().numpy(),cmap = 'Greys', aspect = 'auto')
