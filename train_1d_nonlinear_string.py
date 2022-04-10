@@ -19,7 +19,7 @@ num_variations = 1024
 max_pluck_deflection = 1e-1
 validation_split = 0.1
 
-if(sys.argv[1] == None):
+if(len(sys.argv) == 1):
     epochs = 5000
 else:
     epochs = int(sys.argv[1])

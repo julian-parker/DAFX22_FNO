@@ -18,7 +18,7 @@ simulated_modes = 25
 room_size = 1
 
 
-if(sys.argv[1] == None):
+if(len(sys.argv) == 1):
     epochs = 5000
 else:
     epochs = int(sys.argv[1])
