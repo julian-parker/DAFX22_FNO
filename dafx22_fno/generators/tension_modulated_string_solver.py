@@ -60,10 +60,20 @@ class TensionModulatedStringSolver():
         
         return wb0
 
-    def create_random_initial(self):
+    def create_random_initial(self, hi):
+        kmu = self.kmu
         
-            
-        return fe_xy
+        xsteps  = 2*self.M            # number of steps for numerical integration
+        X       = self.ell/xsteps     # spatial step size
+        xx      = X* np.arange(1,xsteps)   # discrete space axis without boundaries
+        y0     = hi*np.random.uniform(-1,1,xx.shape) # random initial condition -hi < y02 < hi  
+        
+        yb0    = X*sin(kmu[:,newaxis]*xx[newaxis,:])@y0   # perform Fourier sine transformation as a Riemann sum
+
+        zb0     = zeros((self.M))               # initial condition for derivative 
+        wb0     = np.concatenate((yb0, zb0))    # initial condition for ode 
+        
+        return wb0
         
 
     def tensmodstr(self,t1,wb):
