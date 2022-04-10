@@ -1,5 +1,6 @@
 import numpy as np
 import torch
+import sys
 from dafx22_fno.generators.string_solver import StringSolver
 from dafx22_fno.modules.fno_rnn import FNO_RNN_1d
 from dafx22_fno.modules.fno_gru import FNO_GRU_1d
@@ -17,8 +18,13 @@ d1 = 1e-1
 num_variations = 1024
 validation_split = 0.1
 
+if(sys.argv[1] == None):
+    epochs = 5000
+else:
+    epochs = int(sys.argv[1])
+print("\r",f"Starting training for {epochs} epochs", end = "")
+
 width = 16
-epochs = 5000
 batch_size = 350
 device = 'cuda'
 

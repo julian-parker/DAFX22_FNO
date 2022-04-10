@@ -1,5 +1,6 @@
 import numpy as np
 import torch
+import sys
 import time
 from dafx22_fno.generators.wave_solver_2d import WaveSolver2D
 from dafx22_fno.modules.fno_rnn import FNO_RNN_2d
@@ -16,8 +17,14 @@ num_points = 40
 simulated_modes = 25
 room_size = 1
 
+
+if(sys.argv[1] == None):
+    epochs = 5000
+else:
+    epochs = int(sys.argv[1])
+print("\r",f"Starting training for {epochs} epochs", end = "")
+
 width = 16
-epochs = 2500
 device = 'cuda'
 batch_size = 128
 
