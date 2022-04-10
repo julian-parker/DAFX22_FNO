@@ -26,7 +26,7 @@ print("\r",f"Starting training for {epochs} epochs", end = "")
 
 width = 16
 device = 'cuda'
-batch_size = 128
+batch_size = 400
 
 num_example_timesteps = 100
 
@@ -58,9 +58,9 @@ training_output = training_output[:-num_validation,...]
 
 learning_rate = 1e-4
 
-model_gru = FNO_GRU_2d   (in_channels = 3, out_channels = 3, spatial_size_x = training_output.shape[2], spatial_size_y = training_output.shape[3], width = width).to(device)
-model_rnn = FNO_RNN_2d   (in_channels = 3, out_channels = 3, spatial_size_x = training_output.shape[2], spatial_size_y = training_output.shape[3], depth = 3, width = width).to(device)
-model_ref = FNO_Markov_2d(in_channels = 3, out_channels = 3, spatial_size_x = training_output.shape[2], spatial_size_y = training_output.shape[3], depth = 3, width = width).to(device)
+model_gru = torch.nn.DataParallel(FNO_GRU_2d   (in_channels = 3, out_channels = 3, spatial_size_x = training_output.shape[2], spatial_size_y = training_output.shape[3], width = width)).to(device)
+model_rnn = torch.nn.DataParallel(FNO_RNN_2d   (in_channels = 3, out_channels = 3, spatial_size_x = training_output.shape[2], spatial_size_y = training_output.shape[3], depth = 3, width = width)).to(device)
+model_ref = torch.nn.DataParallel(FNO_Markov_2d(in_channels = 3, out_channels = 3, spatial_size_x = training_output.shape[2], spatial_size_y = training_output.shape[3], depth = 3, width = width)).to(device)
 
 params = list(model_gru.parameters()) + list(model_rnn.parameters()) + list(model_ref.parameters())
 dataloader = torch.utils.data.DataLoader(torch.utils.data.TensorDataset(training_input, training_output), batch_size=batch_size, shuffle=True)
