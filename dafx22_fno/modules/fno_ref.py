@@ -3,7 +3,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.nn.parameter import Parameter
-
+from functools import partial
 from .layers import FourierConv1d, FourierConv2d
 
 """
@@ -130,12 +130,16 @@ class SpectralConv1d(nn.Module):
         self.modes1 = modes1  #Number of Fourier modes to multiply, at most floor(N/2) + 1
 
         self.scale = (1 / (in_channels*out_channels))
-        self.weights1 = nn.Parameter(self.scale * torch.rand(in_channels, out_channels, self.modes1, dtype=torch.cfloat))
+        self.weights1 = nn.Parameter(torch.view_as_real(self.scale * torch.rand(in_channels, out_channels, self.modes1, dtype=torch.cfloat)))
 
     # Complex multiplication
-    def compl_mul1d(self, input, weights):
+    def compl_mul1d(self,a, b):
         # (batch, in_channel, x ), (in_channel, out_channel, x) -> (batch, out_channel, x)
-        return torch.einsum("bix,iox->box", input, weights)
+        op = partial(torch.einsum, "bix,iox->box")
+        return torch.stack([
+            op(a[..., 0], b[..., 0]) - op(a[..., 1], b[..., 1]),
+            op(a[..., 1], b[..., 0]) + op(a[..., 0], b[..., 1])
+        ], dim=-1)
 
     def forward(self, x):
         batchsize = x.shape[0]
@@ -143,11 +147,11 @@ class SpectralConv1d(nn.Module):
         x_ft = torch.fft.rfft(x)
 
         # Multiply relevant Fourier modes
-        out_ft = torch.zeros(batchsize, self.out_channels, x.size(-1)//2 + 1,  device=x.device, dtype=torch.cfloat)
+        out_ft = torch.view_as_real(torch.zeros(batchsize, self.out_channels, x.size(-1)//2 + 1,  device=x.device, dtype=torch.cfloat))
         out_ft[:, :, :self.modes1] = self.compl_mul1d(x_ft[:, :, :self.modes1], self.weights1)
 
         #Return to physical space
-        x = torch.fft.irfft(out_ft, n=x.size(-1))
+        x = torch.fft.irfft(torch.view_as_complex(out_ft), n=x.size(-1))
         return x
 
 class SpectralConv2d(nn.Module):
@@ -164,13 +168,17 @@ class SpectralConv2d(nn.Module):
         self.modes2 = modes2
 
         self.scale = (1 / (in_channels * out_channels))
-        self.weights1 = nn.Parameter(self.scale * torch.rand(in_channels, out_channels, self.modes1, self.modes2, dtype=torch.cfloat))
-        self.weights2 = nn.Parameter(self.scale * torch.rand(in_channels, out_channels, self.modes1, self.modes2, dtype=torch.cfloat))
+        self.weights1 = nn.Parameter(torch.view_as_real(self.scale * torch.rand(in_channels, out_channels, self.modes1, self.modes2, dtype=torch.cfloat)))
+        self.weights2 = nn.Parameter(torch.view_as_real(self.scale * torch.rand(in_channels, out_channels, self.modes1, self.modes2, dtype=torch.cfloat)))
 
     # Complex multiplication
-    def compl_mul2d(self, input, weights):
+    def compl_mul2d(self,a, b):
         # (batch, in_channel, x,y ), (in_channel, out_channel, x,y) -> (batch, out_channel, x,y)
-        return torch.einsum("bixy,ioxy->boxy", input, weights)
+        op = partial(torch.einsum, "bixy,ioxy->boxy")
+        return torch.stack([
+            op(a[..., 0], b[..., 0]) - op(a[..., 1], b[..., 1]),
+            op(a[..., 1], b[..., 0]) + op(a[..., 0], b[..., 1])
+            ], dim=-1)
 
     def forward(self, x):
         batchsize = x.shape[0]
@@ -178,12 +186,12 @@ class SpectralConv2d(nn.Module):
         x_ft = torch.fft.rfft2(x)
 
         # Multiply relevant Fourier modes
-        out_ft = torch.zeros(batchsize, self.out_channels,  x.size(-2), x.size(-1)//2 + 1, dtype=torch.cfloat, device=x.device)
+        out_ft = torch.view_as_real(torch.zeros(batchsize, self.out_channels,  x.size(-2), x.size(-1)//2 + 1, dtype=torch.cfloat, device=x.device))
         out_ft[:, :, :self.modes1, :self.modes2] = \
-            self.compl_mul2d(x_ft[:, :, :self.modes1, :self.modes2], self.weights1)
+            self.compl_mul2d(torch.view_as_real(x_ft[:, :, :self.modes1, :self.modes2]), self.weights1)
         out_ft[:, :, -self.modes1:, :self.modes2] = \
-            self.compl_mul2d(x_ft[:, :, -self.modes1:, :self.modes2], self.weights2)
+            self.compl_mul2d(torch.view_as_real(x_ft[:, :, -self.modes1:, :self.modes2]), self.weights2)
 
         #Return to physical space
-        x = torch.fft.irfft2(out_ft, s=(x.size(-2), x.size(-1)))
+        x = torch.fft.irfft2(torch.view_as_complex(out_ft), s=(x.size(-2), x.size(-1)))
         return x
