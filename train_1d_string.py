@@ -139,6 +139,12 @@ output_sequence_gru = model_gru(model_input, num_example_timesteps)
 output_sequence_rnn = model_rnn(model_input, num_example_timesteps)
 output_sequence_ref = model_ref(model_input, num_example_timesteps)
 
+plot_norm = 1/np.max(np.abs(y_x[:,10:]))
+output_sequence_gru *= plot_norm
+output_sequence_rnn *= plot_norm
+output_sequence_ref *= plot_norm
+y_x *= plot_norm
+
 fig_width = 237/72.27 # Latex columnwidth expressed in inches
 figsize = (fig_width, fig_width)
 fig = plt.figure(figsize = figsize)
@@ -151,10 +157,10 @@ plt.rcParams.update({
 gs = fig.add_gridspec(1, 4, hspace=0, wspace=0.05)
 
 axs = gs.subplots(sharex='row', sharey=True)
-axs[0].imshow(output_sequence_gru[0,:,:,0].detach().cpu().numpy(),cmap = 'Greys', aspect = 'auto')
-axs[1].imshow(output_sequence_rnn[0,:,:,0].detach().cpu().numpy(),cmap = 'Greys', aspect = 'auto')
-axs[2].imshow(output_sequence_ref[0,:,:,0].detach().cpu().numpy(),cmap = 'Greys', aspect = 'auto')
-axs[3].imshow(y_x[:,1:].transpose()                              ,cmap = 'Greys', aspect = 'auto')
+axs[0].imshow(output_sequence_gru[0,:,:,0].detach().cpu().numpy(),cmap = 'viridis', aspect = 'auto')
+axs[1].imshow(output_sequence_rnn[0,:,:,0].detach().cpu().numpy(),cmap = 'viridis', aspect = 'auto')
+axs[2].imshow(output_sequence_ref[0,:,:,0].detach().cpu().numpy(),cmap = 'viridis', aspect = 'auto')
+axs[3].imshow(y_x[:,1:].transpose()                              ,cmap = 'viridis', aspect = 'auto')
 
 axs[0].set_yticks([])
 axs[0].set_yticklabels([])
@@ -165,7 +171,9 @@ axs[2].set(title = 'Ref')
 axs[3].set(title = 'Truth')
 
 axs[0].set(ylabel = " $\leftarrow$ t / samples")
+
 for ax in axs:
+    ax.get_images()[0].set_clim(-1, 1)
     ax.label_outer()
     ax.set_xticks([])
     

@@ -8,17 +8,18 @@ from dafx22_fno.modules.fno_ref import FNO_Markov_2d
 import matplotlib.pyplot as plt
 
 dur = 0.0007
-num_variations = 512 #1024
+num_variations = 1024
 validation_split = 0.1
 
 fs = 48000
 num_points = 40
-simulated_modes = 20
+simulated_modes = 25
 room_size = 1
 
 width = 16
 epochs = 2500
 device = 'cuda'
+batch_size = 128
 
 num_example_timesteps = 100
 
@@ -49,7 +50,6 @@ training_input = training_input[:-num_validation,...]
 training_output = training_output[:-num_validation,...]
 
 learning_rate = 1e-4
-batch_size = 128
 
 model_gru = FNO_GRU_2d   (in_channels = 3, out_channels = 3, spatial_size_x = training_output.shape[2], spatial_size_y = training_output.shape[3], width = width).to(device)
 model_rnn = FNO_RNN_2d   (in_channels = 3, out_channels = 3, spatial_size_x = training_output.shape[2], spatial_size_y = training_output.shape[3], depth = 3, width = width).to(device)
@@ -144,6 +144,12 @@ output_sequence_gru = model_gru(model_input, num_example_timesteps)
 output_sequence_rnn = model_rnn(model_input, num_example_timesteps)
 output_sequence_ref = model_ref(model_input, num_example_timesteps)
 
+plot_norm = 1/np.max(np.abs(y_x[:,:,10:]))
+output_sequence_gru *= plot_norm
+output_sequence_rnn *= plot_norm
+output_sequence_ref *= plot_norm
+y_x *= plot_norm
+
 fig_width = 237/72.27 # Latex columnwidth expressed in inches
 figsize = (fig_width, fig_width * 0.75)
 fig = plt.figure(figsize = figsize)
@@ -155,18 +161,18 @@ plt.rcParams.update({
     "font.serif": ["Times"]})
 gs = fig.add_gridspec(3, 4, hspace=0.0, wspace=0.05)
 axs = gs.subplots(sharex='row', sharey=True)
-axs[0,0].imshow(output_sequence_gru[0,0,:,:,0].detach().cpu().numpy().transpose(),cmap = 'Greys', aspect = 'equal')
-axs[0,1].imshow(output_sequence_rnn[0,0,:,:,0].detach().cpu().numpy().transpose(),cmap = 'Greys', aspect = 'equal')
-axs[0,2].imshow(output_sequence_ref[0,0,:,:,0].detach().cpu().numpy().transpose(),cmap = 'Greys', aspect = 'equal')
-axs[0,3].imshow(y_x[...,1].transpose()                                           ,cmap = 'Greys', aspect = 'equal')
-axs[1,0].imshow(output_sequence_gru[0,display_timestep // 2,:,:,0].detach().cpu().numpy().transpose(),cmap = 'Greys', aspect = 'equal')
-axs[1,1].imshow(output_sequence_rnn[0,display_timestep // 2,:,:,0].detach().cpu().numpy().transpose(),cmap = 'Greys', aspect = 'equal')
-axs[1,2].imshow(output_sequence_ref[0,display_timestep // 2,:,:,0].detach().cpu().numpy().transpose(),cmap = 'Greys', aspect = 'equal')
-axs[1,3].imshow(y_x[...,display_timestep // 2 + 1].transpose()                                       ,cmap = 'Greys', aspect = 'equal')
-axs[2,0].imshow(output_sequence_gru[0,display_timestep,:,:,0].detach().cpu().numpy().transpose(),cmap = 'Greys', aspect = 'equal')
-axs[2,1].imshow(output_sequence_rnn[0,display_timestep,:,:,0].detach().cpu().numpy().transpose(),cmap = 'Greys', aspect = 'equal')
-axs[2,2].imshow(output_sequence_ref[0,display_timestep,:,:,0].detach().cpu().numpy().transpose(),cmap = 'Greys', aspect = 'equal')
-axs[2,3].imshow(y_x[...,display_timestep + 1].transpose()                                        ,cmap = 'Greys', aspect = 'equal')
+axs[0,0].imshow(output_sequence_gru[0,0,:,:,0].detach().cpu().numpy().transpose(),cmap = 'viridis', aspect = 'equal')
+axs[0,1].imshow(output_sequence_rnn[0,0,:,:,0].detach().cpu().numpy().transpose(),cmap = 'viridis', aspect = 'equal')
+axs[0,2].imshow(output_sequence_ref[0,0,:,:,0].detach().cpu().numpy().transpose(),cmap = 'viridis', aspect = 'equal')
+axs[0,3].imshow(y_x[...,1].transpose()                                           ,cmap = 'viridis', aspect = 'equal')
+axs[1,0].imshow(output_sequence_gru[0,display_timestep // 2,:,:,0].detach().cpu().numpy().transpose(),cmap = 'viridis', aspect = 'equal')
+axs[1,1].imshow(output_sequence_rnn[0,display_timestep // 2,:,:,0].detach().cpu().numpy().transpose(),cmap = 'viridis', aspect = 'equal')
+axs[1,2].imshow(output_sequence_ref[0,display_timestep // 2,:,:,0].detach().cpu().numpy().transpose(),cmap = 'viridis', aspect = 'equal')
+axs[1,3].imshow(y_x[...,display_timestep // 2 + 1].transpose()                                       ,cmap = 'viridis', aspect = 'equal')
+axs[2,0].imshow(output_sequence_gru[0,display_timestep,:,:,0].detach().cpu().numpy().transpose(),cmap = 'viridis', aspect = 'equal')
+axs[2,1].imshow(output_sequence_rnn[0,display_timestep,:,:,0].detach().cpu().numpy().transpose(),cmap = 'viridis', aspect = 'equal')
+axs[2,2].imshow(output_sequence_ref[0,display_timestep,:,:,0].detach().cpu().numpy().transpose(),cmap = 'viridis', aspect = 'equal')
+axs[2,3].imshow(y_x[...,display_timestep + 1].transpose()                                        ,cmap = 'viridis', aspect = 'equal')
 
 axs[0,0].set(title = 'FGRU')
 axs[0,1].set(title = 'FRNN')
@@ -176,10 +182,12 @@ axs[0,3].set(title = 'Truth')
 axs[0,0].set(ylabel = "t = 0")
 axs[1,0].set(ylabel = f"t = {display_timestep // 2}")
 axs[2,0].set(ylabel = f"t = {display_timestep}")
+
 for i in range(len(axs)):
     for j in range(len(axs[0])):
+        axs[i,j].get_images()[0].set_clim(-1, 1)
         axs[i,j].label_outer()
         axs[i,j].set_xticks([])
         axs[i,j].set_yticks([])
-    
+
 plt.savefig(directory + "/2d_wave_outputs.pdf",bbox_inches='tight')
