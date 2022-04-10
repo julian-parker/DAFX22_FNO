@@ -105,6 +105,12 @@ torch.save(model_ref, path)
 path = directory + "/norms.pt"
 torch.save(normalization_multiplier, path)
 
+del input
+del output
+del dataloader
+del optimizer
+del params
+torch.cuda.empty_cache()
 #######################################################################################################################
 validation_input = validation_input.to(device)
 validation_output = validation_output.to(device)
