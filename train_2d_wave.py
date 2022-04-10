@@ -146,7 +146,7 @@ fe_x = solver.create_impulse(0.5,0.1)
 _,_,y_x, y_vx, y_vy = solver.solve(fe_x)
 model_input = torch.tensor(np.stack([y_x[:,:,0], y_vx[:,:,0], y_vy[:,:,0]], axis = -1 )).unsqueeze(0).to(device)
 model_input *= normalization_multiplier.to(device)
-y_x *= normalization_multiplier[0]
+y_x *= normalization_multiplier[0].cpu().numpy()
 output_sequence_gru = model_gru(model_input, num_example_timesteps)
 output_sequence_rnn = model_rnn(model_input, num_example_timesteps)
 output_sequence_ref = model_ref(model_input, num_example_timesteps)

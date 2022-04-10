@@ -142,7 +142,7 @@ fe_x = stringSolver.create_pluck(0.49, max_pluck_deflection)
 y_x, y_defl_x = stringSolver.solve(fe_x)
 model_input = torch.tensor(np.stack([y_x[:,0], y_defl_x[:,0]], axis = -1 )).unsqueeze(0).to(device)
 model_input *= normalization_multiplier.to(device)
-y_x *= normalization_multiplier[0]
+y_x *= normalization_multiplier[0].cpu().numpy()
 
 output_sequence_gru = model_gru(model_input, num_example_timesteps)
 output_sequence_rnn = model_rnn(model_input, num_example_timesteps)
