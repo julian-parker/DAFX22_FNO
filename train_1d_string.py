@@ -100,6 +100,8 @@ path = directory + "/model_rnn.pt"
 torch.save(model_rnn, path)
 path = directory + "/model_ref.pt" 
 torch.save(model_ref, path)
+path = directory + "/norms.pt"
+torch.save(normalization_multiplier, path)
 
 #######################################################################################################################
 validation_input = validation_input.to(device)
