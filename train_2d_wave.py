@@ -125,12 +125,14 @@ validation_input = validation_input.to(device)
 validation_output = validation_output.to(device)
 
 val_gru_out = model_gru(validation_input[:,0,...], validation_output.shape[1])
-val_rnn_out = model_rnn(validation_input[:,0,...], validation_output.shape[1])
-val_ref_out = model_ref(validation_input[:,0,...], validation_output.shape[1])
-
 val_gru_mse = torch.nn.functional.mse_loss(val_gru_out, validation_output).detach().cpu().numpy()
+del val_gru_out
+val_rnn_out = model_rnn(validation_input[:,0,...], validation_output.shape[1])
 val_rnn_mse = torch.nn.functional.mse_loss(val_rnn_out, validation_output).detach().cpu().numpy()
+del val_rnn_out
+val_ref_out = model_ref(validation_input[:,0,...], validation_output.shape[1])
 val_ref_mse = torch.nn.functional.mse_loss(val_ref_out, validation_output).detach().cpu().numpy()
+del val_ref_out
 
 with open(directory + "/validation.txt", 'w') as f:
     f.write(f"GRU validation MSE:{val_gru_mse:.8f} || RNN validation MSE:{val_rnn_mse:.8f} || Ref validation MSE:{val_ref_mse:.8f}")
