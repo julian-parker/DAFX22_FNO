@@ -30,12 +30,12 @@ stringSolver = TensionModulatedStringSolver(dur = dur, Fs = fs, delta_x = delta_
 training_input = torch.zeros((num_variations,1,stringSolver.numXs,2))
 training_output = torch.zeros((num_variations,stringSolver.numT -1 ,stringSolver.numXs,2))
 for i in range(num_variations):
-    if (i < num_variations):
+    hi = np.random.rand(1) * max_pluck_deflection
+    if (i < num_variations // 2):
         pos = np.random.rand(1)
-        hi = np.random.rand(1) * max_pluck_deflection
         fe_x = stringSolver.create_pluck(pos, hi)
     else:
-        fe_x = stringSolver.create_random_initial()
+        fe_x = stringSolver.create_random_initial(hi)
     y_x, y_defl_x = stringSolver.solve(fe_x)
     training_input[i,:,:,:] = torch.tensor(np.stack([y_x[:,0], y_defl_x[:,0]], axis = -1 )).unsqueeze(0)
     training_output[i,:,:,:] = torch.tensor(np.stack([y_x[:,1:].transpose(), y_defl_x[:,1:].transpose()], axis = -1 )).unsqueeze(0)
