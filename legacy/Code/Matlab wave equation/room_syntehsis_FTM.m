@@ -90,8 +90,8 @@ Ka3 = @(x,y) 4*cos(lamX.*x).*cos(lamY.*y);
 %% Input signal 
 
 % Use a delta at exciation position on the string 
-xe = 0.2*lx;
-ye = 0.2*ly;
+xe = 0.4*lx;
+ye = 0.5*ly;
 
 fe_xy = zeros(1,length(smu));
 
@@ -184,5 +184,15 @@ for xi = 1:length(xs)
         y_vx(xi,yi,:) = squeeze(K2_vx(xi,yi,:)).'*ybar;
         y_vy(xi,yi,:) = squeeze(K3_vy(xi,yi,:)).'*ybar;
     end
+end
+
+
+%% visualize spatial domain through time
+figure()
+img = real(y_sp);
+plt = imagesc(img(:,:,1));
+for t = 1:size(img,3)
+    plt.set('CData',img(:,:,t));
+    drawnow
 end
 
