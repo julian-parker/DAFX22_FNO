@@ -87,7 +87,7 @@ for ep in range(epochs):
     loss_ref = torch.log10(torch.nn.functional.mse_loss(pred_ref, output))
     loss_ref.backward()
     del pred_ref
-    torch.nn.utils.clip_grad_norm_(params, 0.5)
+    torch.nn.utils.clip_grad_norm_(params, 1)
     optimizer.step()
     scheduler.step()
   loss_history[ep,0] = np.power(10,loss_gru.detach().cpu().numpy())

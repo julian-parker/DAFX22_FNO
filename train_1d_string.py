@@ -83,7 +83,7 @@ for ep in range(epochs):
     pred_ref = model_ref(model_input, num_time_steps = training_output.shape[1])
     loss_ref = torch.log10(torch.nn.functional.mse_loss(pred_ref, output))
     loss_ref.backward()
-    torch.nn.utils.clip_grad_norm_(params, 0.5)
+    torch.nn.utils.clip_grad_norm_(params, 1)
     optimizer.step()
     scheduler.step()
   loss_history[ep,0] = np.power(10,loss_gru.detach().cpu().numpy())
