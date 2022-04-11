@@ -13,10 +13,10 @@ import os
 dur = 0.0025
 fs = 48000
 delta_x = 5e-3
-d1 = 1e-1
+d1 = 1e-2
 
 num_variations = 1024
-max_pluck_deflection = 1e-1
+max_pluck_deflection = 1e-2
 validation_split = 0.1
 
 if(len(sys.argv) == 1):
@@ -140,7 +140,7 @@ with open(directory + "/validation.txt", 'w') as f:
 dur = (num_example_timesteps+1)/fs
 stringSolver = TensionModulatedStringSolver(dur = dur, Fs = fs,delta_x = delta_x, d1 = d1)
 
-fe_x = stringSolver.create_pluck(0.49, max_pluck_deflection)
+fe_x = stringSolver.create_pluck(0.49, 0.5 * max_pluck_deflection)
 y_x, y_defl_x = stringSolver.solve(fe_x)
 model_input = torch.tensor(np.stack([y_x[:,0], y_defl_x[:,0]], axis = -1 )).unsqueeze(0).to(device)
 model_input *= normalization_multiplier.to(device)
