@@ -12,8 +12,8 @@ class FourierConv1d(torch.nn.Module):
         else:
             self.size = size // 2
 
-        self.weights = torch.nn.Parameter(torch.view_as_real((1 / (in_channels * out_channels)) * torch.randn(in_channels, out_channels, self.size, dtype=torch.cfloat)))
-        self.biases = torch.nn.Parameter(torch.view_as_real((1 / out_channels) * torch.randn(out_channels, self.size, dtype=torch.cfloat)))
+        self.weights = torch.nn.Parameter(torch.view_as_real((1 / (in_channels * out_channels)) * torch.rand(in_channels, out_channels, self.size, dtype=torch.cfloat)))
+        self.biases = torch.nn.Parameter(torch.view_as_real((1 / out_channels) * torch.rand(out_channels, self.size, dtype=torch.cfloat)))
         self.bias = bias
         self.periodic = periodic
 
@@ -45,8 +45,8 @@ class FourierConv2d(torch.nn.Module):
           self.size_x = size_x // 2
           self.size_y = size_y // 2
 
-        self.weights = torch.nn.Parameter(torch.view_as_real((1 / (in_channels * out_channels)) * torch.randn(in_channels, out_channels, self.size_x, self.size_y, dtype=torch.cfloat)))
-        self.biases = torch.nn.Parameter(torch.view_as_real((1 / out_channels) * torch.randn(out_channels, self.size_x, self.size_y,dtype=torch.cfloat)))
+        self.weights = torch.nn.Parameter(torch.view_as_real((1 / (in_channels * out_channels)) * torch.rand(in_channels, out_channels, self.size_x, self.size_y, dtype=torch.cfloat)))
+        self.biases = torch.nn.Parameter(torch.view_as_real((1 / out_channels) * torch.rand(out_channels, self.size_x, self.size_y,dtype=torch.cfloat)))
         self.bias = bias
         self.periodic = periodic
 
