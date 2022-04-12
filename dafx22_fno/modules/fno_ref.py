@@ -144,7 +144,7 @@ class SpectralConv1d(nn.Module):
     def forward(self, x):
         batchsize = x.shape[0]
         #Compute Fourier coeffcients up to factor of e^(- something constant)
-        x_ft = torch.fft.rfft(x)
+        x_ft = torch.view_as_real(torch.fft.rfft(x))
 
         # Multiply relevant Fourier modes
         out_ft = torch.view_as_real(torch.zeros(batchsize, self.out_channels, x.size(-1)//2 + 1,  device=x.device, dtype=torch.cfloat))
