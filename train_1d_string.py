@@ -12,7 +12,7 @@ import os
 
 dur = 0.0025
 fs = 48000
-delta_x = 5e-3
+delta_x = 1e-2
 d1 = 1e-1
 
 num_variations = 1024
@@ -25,7 +25,7 @@ else:
 print("\r",f"Starting training for {epochs} epochs", end = "")
 
 width = 16
-batch_size = 350
+batch_size = 512
 device = 'cuda'
 
 num_example_timesteps = 1000
@@ -59,7 +59,7 @@ model_gru = FNO_GRU_1d   (in_channels = 2, out_channels = 2, spatial_size = trai
 model_rnn = FNO_RNN_1d   (in_channels = 2, out_channels = 2, spatial_size = training_output.shape[2], depth = 3, width = width).to(device)
 model_ref = FNO_Markov_1d(in_channels = 2, out_channels = 2, spatial_size = training_output.shape[2], depth = 3, width = width).to(device)
 
-learning_rate = 1e-4
+learning_rate = 2e-4
 
 params = list(model_gru.parameters()) + list(model_rnn.parameters()) + list(model_ref.parameters())
 dataloader = torch.utils.data.DataLoader(torch.utils.data.TensorDataset(training_input, training_output), batch_size=batch_size, shuffle=True)
