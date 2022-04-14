@@ -25,7 +25,7 @@ else:
     epochs = int(sys.argv[1])
 print("\r",f"Starting training for {epochs} epochs", end = "")
 
-width = 16
+width = 32
 batch_size = 512
 device = 'cuda'
 
@@ -140,7 +140,7 @@ with open(directory + "/validation.txt", 'w') as f:
 dur = (num_example_timesteps+1)/fs
 stringSolver = TensionModulatedStringSolver(dur = dur, Fs = fs,delta_x = delta_x, d1 = d1)
 
-fe_x = stringSolver.create_pluck(0.49, 0.5 * max_pluck_deflection)
+fe_x = stringSolver.create_pluck(0.49, 0.1 * max_pluck_deflection)
 y_x, y_defl_x = stringSolver.solve(fe_x)
 model_input = torch.tensor(np.stack([y_x[:,0], y_defl_x[:,0]], axis = -1 )).unsqueeze(0).to(device)
 model_input *= normalization_multiplier.to(device)
@@ -150,30 +150,31 @@ output_sequence_gru = model_gru(model_input, num_example_timesteps)
 output_sequence_rnn = model_rnn(model_input, num_example_timesteps)
 output_sequence_ref = model_ref(model_input, num_example_timesteps)
 
-plot_norm = 1/np.max(np.abs(y_x[:,10:]))
+plot_norm = 1/np.max(np.abs(y_x[:,0:]))
 output_sequence_gru *= plot_norm
 output_sequence_rnn *= plot_norm
 output_sequence_ref *= plot_norm
 y_x *= plot_norm
 
 fig_width = 237/72.27 # Latex columnwidth expressed in inches
-figsize = (fig_width, fig_width)
+figsize = (fig_width, 0.618*fig_width)
 fig = plt.figure(figsize = figsize)
 plt.rcParams.update({
     'axes.titlesize': 'small',
     "text.usetex": True,
     "font.family": "serif",
-    "font.size": 10,
+    "font.size": 9,
     "font.serif": ["Times"]})
 gs = fig.add_gridspec(1, 4, hspace=0, wspace=0.05)
 
 axs = gs.subplots(sharex='row', sharey=True)
-axs[0].imshow(output_sequence_gru[0,:,:,0].detach().cpu().numpy(),cmap = 'viridis', aspect = 'auto')
-axs[1].imshow(output_sequence_rnn[0,:,:,0].detach().cpu().numpy(),cmap = 'viridis', aspect = 'auto')
-axs[2].imshow(output_sequence_ref[0,:,:,0].detach().cpu().numpy(),cmap = 'viridis', aspect = 'auto')
-axs[3].imshow(y_x[:,1:].transpose()                              ,cmap = 'viridis', aspect = 'auto')
+axs[0].imshow(output_sequence_gru[0,:,:,0].detach().cpu().numpy(),cmap = 'viridis', aspect = 'auto', interpolation = 'none')
+axs[1].imshow(output_sequence_rnn[0,:,:,0].detach().cpu().numpy(),cmap = 'viridis', aspect = 'auto', interpolation = 'none')
+axs[2].imshow(output_sequence_ref[0,:,:,0].detach().cpu().numpy(),cmap = 'viridis', aspect = 'auto', interpolation = 'none')
+axs[3].imshow(y_x[:,1:].transpose()                              ,cmap = 'viridis', aspect = 'auto', interpolation = 'none')
 
-axs[0].set_yticks([])
+
+axs[0].set_yticks([training_point])
 axs[0].set_yticklabels([])
 
 axs[0].set(title = 'FGRU')
@@ -181,8 +182,12 @@ axs[1].set(title = 'FRNN')
 axs[2].set(title = 'Ref')
 axs[3].set(title = 'Truth')
 
-axs[0].set(ylabel = " $\leftarrow$ t / samples")
+
+axs[0].set(ylabel = " $\leftarrow$ t (/s)")
+axs[0].set(xlabel = "x (/m)")
+
 for ax in axs:
+    ax.tick_params(color = "red")
     ax.get_images()[0].set_clim(-1, 1)
     ax.label_outer()
     ax.set_xticks([])

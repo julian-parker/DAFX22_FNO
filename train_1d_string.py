@@ -154,23 +154,24 @@ output_sequence_ref *= plot_norm
 y_x *= plot_norm
 
 fig_width = 237/72.27 # Latex columnwidth expressed in inches
-figsize = (fig_width, fig_width)
+figsize = (fig_width, 0.618*fig_width)
 fig = plt.figure(figsize = figsize)
 plt.rcParams.update({
     'axes.titlesize': 'small',
     "text.usetex": True,
     "font.family": "serif",
-    "font.size": 10,
+    "font.size": 9,
     "font.serif": ["Times"]})
 gs = fig.add_gridspec(1, 4, hspace=0, wspace=0.05)
 
 axs = gs.subplots(sharex='row', sharey=True)
-axs[0].imshow(output_sequence_gru[0,:,:,0].detach().cpu().numpy(),cmap = 'viridis', aspect = 'auto')
-axs[1].imshow(output_sequence_rnn[0,:,:,0].detach().cpu().numpy(),cmap = 'viridis', aspect = 'auto')
-axs[2].imshow(output_sequence_ref[0,:,:,0].detach().cpu().numpy(),cmap = 'viridis', aspect = 'auto')
-axs[3].imshow(y_x[:,1:].transpose()                              ,cmap = 'viridis', aspect = 'auto')
+axs[0].imshow(output_sequence_gru[0,:,:,0].detach().cpu().numpy(),cmap = 'viridis', aspect = 'auto', interpolation = "none")
+axs[1].imshow(output_sequence_rnn[0,:,:,0].detach().cpu().numpy(),cmap = 'viridis', aspect = 'auto', interpolation = "none")
+axs[2].imshow(output_sequence_ref[0,:,:,0].detach().cpu().numpy(),cmap = 'viridis', aspect = 'auto', interpolation = "none")
+axs[3].imshow(y_x[:,1:].transpose()                              ,cmap = 'viridis', aspect = 'auto', interpolation = "none")
 
-axs[0].set_yticks([])
+
+axs[0].set_yticks([training_point])
 axs[0].set_yticklabels([])
 
 axs[0].set(title = 'FGRU')
@@ -178,11 +179,66 @@ axs[1].set(title = 'FRNN')
 axs[2].set(title = 'Ref')
 axs[3].set(title = 'Truth')
 
-axs[0].set(ylabel = " $\leftarrow$ t / samples")
+
+axs[0].set(ylabel = " $\leftarrow$ t (/s)")
+axs[0].set(xlabel = "x (/m)")
 
 for ax in axs:
+    ax.tick_params(color = "red")
     ax.get_images()[0].set_clim(-1, 1)
     ax.label_outer()
     ax.set_xticks([])
     
 plt.savefig(directory + "/1d_string_outputs.pdf",bbox_inches='tight')
+
+#######################################################################################################################
+
+cur_step = output_sequence_gru.reshape(output_sequence_gru.shape[1], output_sequence_gru.shape[2] * output_sequence_gru.shape[3]).detach().cpu().numpy()
+next_step = cur_step[1:,:].transpose()
+cur_step = cur_step[:-1,:].transpose()
+transition_gru = np.linalg.lstsq(cur_step, next_step)[0]
+eigenvals_gru = np.linalg.eigvals(transition_gru)
+
+cur_step = output_sequence_rnn.reshape(output_sequence_rnn.shape[1], output_sequence_gru.shape[2] * output_sequence_gru.shape[3]).detach().cpu().numpy()
+next_step = cur_step[1:,:].transpose()
+cur_step = cur_step[:-1,:].transpose()
+transition_rnn = np.linalg.lstsq(cur_step, next_step)[0]
+eigenvals_rnn = np.linalg.eigvals(transition_rnn)
+
+cur_step = output_sequence_ref.reshape(output_sequence_ref.shape[1], output_sequence_gru.shape[2] * output_sequence_gru.shape[3]).detach().cpu().numpy()
+next_step = cur_step[1:,:].transpose()
+cur_step = cur_step[:-1,:].transpose()
+transition_ref = np.linalg.lstsq(cur_step, next_step)[0]
+eigenvals_ref = np.linalg.eigvals(transition_ref)
+
+cur_step = np.stack([y_x, y_defl_x], axis = 1 )
+cur_step = cur_step.reshape(cur_step.shape[0] * cur_step.shape[1], cur_step.shape[2])
+next_step = cur_step[:,1:]
+cur_step = cur_step[:,:-1]
+transition_true = np.linalg.lstsq(cur_step, next_step)[0]
+eigenvals_true = np.linalg.eigvals(transition_true)
+
+fig_width = 237/72.27 # Latex columnwidth expressed in inches
+figsize = (fig_width, 0.618*fig_width)
+fig = plt.figure(figsize = figsize)
+ax = plt.gca()
+plt.rcParams.update({
+    'axes.titlesize': 'small',
+    "text.usetex": True,
+    "font.family": "serif",
+    "font.size": 9,
+    "font.serif": ["Times"]})
+gs = fig.add_gridspec(1, 4, hspace=0, wspace=0.05)
+ax.scatter((48000/(2*np.pi)) * np.angle(eigenvals_gru),  20*np.log10(np.abs(eigenvals_gru)), label = "FGRU", s =9, marker = 'x', alpha = 0.8)
+ax.scatter((48000/(2*np.pi)) * np.angle(eigenvals_rnn),  20*np.log10(np.abs(eigenvals_rnn)), label = "FRNN", s =9, marker = '*', alpha = 0.8)
+ax.scatter((48000/(2*np.pi)) * np.angle(eigenvals_ref),  20*np.log10(np.abs(eigenvals_ref)), label = "Ref.", s =9, c = 'grey', marker = 'v', alpha= 0.8)
+ax.scatter((48000/(2*np.pi)) * np.angle(eigenvals_true), 20*np.log10(np.abs(eigenvals_true)),label = "Truth", s =9, marker = 's', c = 'purple', alpha = 0.5)
+ax.legend()
+ax.set_xlabel("Pole freq. (/Hz)")
+ax.set_ylabel("Pole mag. (/dB)")
+ax.set_xscale('log')
+plt.xlim([20,20000])
+plt.ylim([-0.5,0])
+
+
+plt.savefig(directory + "/1d_string_poles.pdf",bbox_inches='tight')
