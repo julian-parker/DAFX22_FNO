@@ -35,3 +35,5 @@ gem "http_parser.rb", "~> 0.6.0", :platforms => [:jruby]
 gem "github-pages", "~> 226", group: :jekyll_plugins
 
 gem "webrick"
+
+gem "nokogiri", ">= 1.13.4"
