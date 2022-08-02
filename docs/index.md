@@ -26,6 +26,7 @@
 |$\rho_o$ | 1.2041|
 
 #### Nonlinear Tension Modulated String
+
 | Quantity | Value |
 |:--------:|:-----:|
 |$l$ | 0.65       |
