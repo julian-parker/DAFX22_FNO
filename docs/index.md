@@ -2,11 +2,11 @@
 usemathjax: true
 ---
 
-## Supplemental Info
+# Supplemental Material for Physical Modeling using Recurrent Neural Networks with Fast Convolutional Layers
 
-### Physical parameters used for dataset generation
+## Physical parameters used for dataset generation
 
-#### Linear String
+### Linear String
 
 | Quantity | Value |
 |:--------:|:-----:|
@@ -20,7 +20,7 @@ usemathjax: true
 |$T_s$ |60.97|
 |$\nu$ |50|   
 
-#### 2d wave equation
+### 2d wave equation
 
 | Quantity | Value |
 |:--------:|:-----:|
@@ -29,7 +29,7 @@ usemathjax: true
 |$c_0$ | 340 |
 |$\rho_o$ | 1.2041|
 
-#### Nonlinear Tension Modulated String
+### Nonlinear Tension Modulated String
 
 | Quantity | Value |
 |:--------:|:-----:|
@@ -42,7 +42,7 @@ usemathjax: true
 |$d_3$  | 6e-5       |
 |$T_{s0}$ | 60.97      |
 
-### Network Hyperparameters
+## Network Hyperparameters
 
 
 ## Sound Examples
