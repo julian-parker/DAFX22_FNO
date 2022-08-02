@@ -1,3 +1,7 @@
+---
+usemathjax: true
+---
+
 ## Supplemental Info
 
 ### Physical parameters used for dataset generation
