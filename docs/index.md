@@ -1,39 +1,50 @@
-## Welcome to GitHub Pages
+## Supplemental Info
 
-Sebastian J. Schlecht Test
+### Physical parameters used for dataset generation
 
-You can use the [editor on GitHub](https://github.com/SebastianJiroSchlecht/Test-GH-Page/edit/main/docs/index.md) to maintain and preview the content for your website in Markdown files.
+#### Linear String
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+| Quantity | Value |
+|:--------:|:-----:|
+|$E$ | 5.4 e9|              
+|$\rho_s$ | 1140|             
+|$l$ | 0.65|              
+|$A$ | 0.5188 e-6|  
+|$I$ | 0.171 e-12|
+|$d_1$ |8 e-1|
+|$d_3$ |1.4 e-5|
+|$T_s$ |60.97|
+|$\nu$ |50|   
 
-### Markdown
+#### 2d wave equation
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+| Quantity | Value |
+|:--------:|:-----:|
+|$l_x$ | 1 |
+|$l_y$ | 0.95 |
+|$c_0$ | 340 |
+|$\rho_o$ | 1.2041|
 
-```markdown
-Syntax highlighted code block
+#### Nonlinear Tension Modulated String
+| Quantity | Value |
+|:--------:|:-----:|
+|$l$ | 0.65       |
+|$A$   | 0.5188e-6  |
+|$I$   | 0.171e-12  |
+|$\rho$ | 1140       |
+|$E$   | 5.4e9      |
+|$d_1$  | 1e-2       |
+|$d_3$  | 6e-5       |
+|$T_{s0}$ | 60.97      |
 
-# Header 1
-## Header 2
-### Header 3
+### Network Hyperparameters
 
-- Bulleted
-- List
 
-1. Numbered
-2. List
+## Sound Examples
 
-**Bold** and _Italic_ and `Code` text
 
-[Link](url) and ![Image](src)
-```
+## Animations
 
-For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
 
-### Jekyll Themes
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/SebastianJiroSchlecht/Test-GH-Page/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
 
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
