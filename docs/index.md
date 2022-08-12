@@ -102,11 +102,20 @@ string_rnn
 </div>
 
 
-<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-<script src="{{ site.baseurl}}/js/trackswitch.min.js"></script>
+
+
+### Credits
+
+[Trackswitch.js](https://audiolabs.github.io/trackswitch.js/) was developed by Nils Werner, Stefan Balke, Fabian-Rober Stöter, Meinard Müller and Bernd Edler. 
+
+<script src="https://cdn.rawgit.com/download/polymer-cdn/1.5.0/lib/webcomponentsjs/webcomponents-lite.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+<script src="/js/trackswitch.js"></script>
 <script type="text/javascript">
-    jQuery(document).ready(function() {
-        jQuery(".player").trackSwitch({spacebar: true});
+	var $j = jQuery.noConflict();
+    $j(document).ready(function() {
+        // $j(".customplayer").trackswitch({ onlyradiosolo: true, repeat: true });
+        $j(".player").trackSwitch({ onlyradiosolo: true, repeat: true });
     });
-</script>
+</script>	
 
