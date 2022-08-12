@@ -102,7 +102,7 @@ string_rnn
 </div>
 
 
-<script src="https://code.jquery.com/jquery-3.2.1.min.js" type="text/javascript"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="{{ site.baseurl}}/js/trackswitch.min.js"></script>
 <script type="text/javascript">
     jQuery(document).ready(function() {
