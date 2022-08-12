@@ -20,6 +20,90 @@
     
 # Supplemental Material for Physical Modeling using Recurrent Neural Networks with Fast Convolutional Layers
 
+
+## Example 1 - Linear String
+
+<video width="640" height="480" controls>
+  <source src="{{ site.baseurl}}/examples/videos/1d_string_anim.mp4" type="video/mp4">
+	Your browser does not support the video tag.
+</video> 
+ 
+### Linear string GRU
+<audio controls>
+  <source src="{{ site.baseurl}}/examples/sounds/string_gru.wav" type="audio/ogg">
+  <source src="{{ site.baseurl}}/examples/sounds/string_gru.wav" type="audio/mpeg">
+  Your browser does not support the audio tag. 
+</audio>
+
+### Linear string Real
+<audio controls>
+  <source src="{{ site.baseurl}}/examples/sounds/string_real.wav" type="audio/ogg">
+  <source src="{{ site.baseurl}}/examples/sounds/string_real.wav" type="audio/mpeg">
+  Your browser does not support the audio tag. 
+</audio>
+
+### Linear string Reference
+<audio controls>
+  <source src="{{ site.baseurl}}/examples/sounds/string_ref.wav" type="audio/ogg">
+  <source src="{{ site.baseurl}}/examples/sounds/string_ref.wav" type="audio/mpeg">
+  Your browser does not support the audio tag. 
+</audio>
+
+### Linear string RNN
+<audio controls>
+  <source src="{{ site.baseurl}}/examples/sounds/string_rnn.wav" type="audio/ogg">
+  <source src="{{ site.baseurl}}/examples/sounds/string_rnn.wav" type="audio/mpeg">
+  Your browser does not support the audio tag. 
+</audio>
+
+
+
+
+## Example 2 - Nonlinear String
+
+<video width="640" height="480" controls>
+  <source src="{{ site.baseurl}}/examples/videos/1d_nonlinear_string_anim.mp4" type="video/mp4">
+	Your browser does not support the video tag.
+</video> 
+
+
+### Nonlinear string GRU
+<audio controls>
+  <source src="{{ site.baseurl}}/examples/sounds/nonlinear_string_gru.wav" type="audio/ogg">
+  <source src="{{ site.baseurl}}/examples/sounds/nonlinear_string_gru.wav" type="audio/mpeg">
+  Your browser does not support the audio tag. 
+</audio>
+
+### Nonlinear string Real
+<audio controls>
+  <source src="{{ site.baseurl}}/examples/sounds/nonlinear_string_real.wav" type="audio/ogg">
+  <source src="{{ site.baseurl}}/examples/sounds/nonlinear_string_real.wav" type="audio/mpeg">
+  Your browser does not support the audio tag. 
+</audio>
+
+### Nonlinear string Reference
+<audio controls>
+  <source src="{{ site.baseurl}}/examples/sounds/nonlinear_string_ref.wav" type="audio/ogg">
+  <source src="{{ site.baseurl}}/examples/sounds/nonlinear_string_ref.wav" type="audio/mpeg">
+  Your browser does not support the audio tag. 
+</audio>
+
+### Nonlinear string RNN
+<audio controls>
+  <source src="{{ site.baseurl}}/examples/sounds/nonlinear_string_rnn.wav" type="audio/ogg">
+  <source src="{{ site.baseurl}}/examples/sounds/nonlinear_string_rnn.wav" type="audio/mpeg">
+  Your browser does not support the audio tag. 
+</audio>
+
+
+## Example 3 - 2D Wave Equation
+
+<video width="640" height="480" controls>
+  <source src="{{ site.baseurl}}/examples/videos/2d_wave_anim.mp4" type="video/mp4">
+	Your browser does not support the video tag.
+</video> 
+
+
 ## Physical parameters used for dataset generation
 
 ### Linear String
@@ -59,63 +143,3 @@
 |$T_{s0}$ | 60.97      |
 
 ## Network Hyperparameters
-
-
-## Sound Examples
-
-<audio controls>
-  <source src="{{ site.baseurl}}/examples/sounds/nonlinear_string_gru.wav" type="audio/ogg">
-  <source src="{{ site.baseurl}}/examples/sounds/nonlinear_string_gru.wav" type="audio/mpeg">
-  Your browser does not support the audio tag. 
-</audio>
-
-
-nonlinear_string_real
-
-nonlinear_string_ref
-
-nonlinear_string_rnn
-
-string_gru
-string_real
-string_ref
-string_rnn
-
-## Animations
-
-1d_string_anim
-
-<video width="320" height="240" controls>
-  <source src="{{ site.baseurl}}/examples/videos/1d_string_anim.mp4" type="video/mp4">
-	Your browser does not support the video tag.
-</video> 
-
-
-
-<div class="player">
-  <p>
-      Example trackswitch.js instance.
-  </p>
-  <ts-track title="Drums">
-      <ts-source src="{{ site.baseurl}}/examples/sounds/nonlinear_string_gru.wav" type="audio/mpeg"></ts-source>
-  </ts-track>
-</div>
-
-
-
-
-### Credits
-
-[Trackswitch.js](https://audiolabs.github.io/trackswitch.js/) was developed by Nils Werner, Stefan Balke, Fabian-Rober Stöter, Meinard Müller and Bernd Edler. 
-
-<script src="https://cdn.rawgit.com/download/polymer-cdn/1.5.0/lib/webcomponentsjs/webcomponents-lite.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
-<script src="{{ site.baseurl}}/js/trackswitch.js"></script>
-<script type="text/javascript">
-	var $j = jQuery.noConflict();
-    $j(document).ready(function() {
-        // $j(".customplayer").trackswitch({ onlyradiosolo: true, repeat: true });
-        $j(".player").trackSwitch({ onlyradiosolo: true, repeat: true });
-    });
-</script>	
-
