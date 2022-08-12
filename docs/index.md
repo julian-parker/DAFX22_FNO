@@ -110,7 +110,7 @@ string_rnn
 
 <script src="https://cdn.rawgit.com/download/polymer-cdn/1.5.0/lib/webcomponentsjs/webcomponents-lite.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
-<script src="/js/trackswitch.js"></script>
+<script src="{{ site.baseurl}}/js/trackswitch.js"></script>
 <script type="text/javascript">
 	var $j = jQuery.noConflict();
     $j(document).ready(function() {
