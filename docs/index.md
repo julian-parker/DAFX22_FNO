@@ -15,34 +15,7 @@
 <link rel="stylesheet" href="{{ site.baseurl}}/css/trackswitch.min.css" />
 
 
-<div class="player">
-  <p>
-      Example trackswitch.js instance.
-  </p>
-  <img src="mix.png" class="seekable"/>
-  <ts-track title="Drums" data-img="drums.png">
-      <ts-source src="drums.mp3" type="audio/mpeg"></ts-source>
-  </ts-track>
-  <ts-track title="Synth" data-img="synth.png">
-      <ts-source src="synth.mp3" type="audio/mpeg"></ts-source>
-  </ts-track>
-  <ts-track title="Bass" data-img="bass.png">
-      <ts-source src="bass.mp3" type="audio/mpeg"></ts-source>
-  </ts-track>
-  <ts-track title="Violins" data-img="violins.png">
-      <ts-source src="violins.mp3" type="audio/mpeg"></ts-source>
-  </ts-track>
-</div>
 
-ok
-
-<script src="https://code.jquery.com/jquery-3.2.1.min.js" type="text/javascript"></script>
-<script src="{{ site.baseurl}}/js/trackswitch.min.js"></script>
-<script type="text/javascript">
-    jQuery(document).ready(function() {
-        jQuery(".player").trackSwitch({spacebar: true});
-    });
-</script>
 
     
 # Supplemental Material for Physical Modeling using Recurrent Neural Networks with Fast Convolutional Layers
@@ -116,3 +89,24 @@ string_rnn
   <source src="{{ site.baseurl}}/examples/videos/1d_string_anim.mp4" type="video/mp4">
 	Your browser does not support the video tag.
 </video> 
+
+
+
+<div class="player">
+  <p>
+      Example trackswitch.js instance.
+  </p>
+  <ts-track title="Drums">
+      <ts-source src="{{ site.baseurl}}/examples/sounds/nonlinear_string_gru.wav" type="audio/mpeg"></ts-source>
+  </ts-track>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.2.1.min.js" type="text/javascript"></script>
+<script src="{{ site.baseurl}}/js/trackswitch.min.js"></script>
+<script type="text/javascript">
+    jQuery(document).ready(function() {
+        jQuery(".player").trackSwitch({spacebar: true});
+    });
+</script>
+
