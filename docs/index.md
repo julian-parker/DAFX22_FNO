@@ -62,10 +62,23 @@
   Your browser does not support the audio tag. 
 </audio>
 
+
+nonlinear_string_real
+
+nonlinear_string_ref
+
+nonlinear_string_rnn
+
+string_gru
+string_real
+string_ref
+string_rnn
+
 ## Animations
 
-$$
-K(a,b) = \int \mathcal{D}x(t) \exp(2\pi i S[x]/\hbar)
-$$
+1d_string_anim
 
-
+<video width="320" height="240" controls>
+  <source src="{{ site.baseurl}}/examples/videos/1d_string_anim.mp4" type="video/mp4">
+	Your browser does not support the video tag.
+</video> 
