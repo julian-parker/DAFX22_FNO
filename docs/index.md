@@ -57,9 +57,9 @@
 ## Sound Examples
 
 <audio controls>
-  <source src="{{ site.baseurl}}/examples/sounds/nonlinear_string_gru.wav" type="audio/ogg">
-  <source src="{{ site.baseurl}}/examples/sounds/nonlinear_string_gru.wav" type="audio/mpeg">
-  Your browser does not support the audio tag.
+  <source src="/examples/sounds/nonlinear_string_gru.wav" type="audio/ogg">
+  <source src="/examples/sounds/nonlinear_string_gru.wav" type="audio/mpeg">
+  Your browser does not support the audio tag. 
 </audio>
 
 ## Animations
