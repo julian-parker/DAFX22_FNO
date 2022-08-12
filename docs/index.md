@@ -36,7 +36,7 @@
 
 ok
 
-<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js" type="text/javascript"></script>
 <script src="{{ site.baseurl}}/js/trackswitch.min.js"></script>
 <script type="text/javascript">
     jQuery(document).ready(function() {
