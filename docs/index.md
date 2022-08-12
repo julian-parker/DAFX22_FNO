@@ -9,7 +9,44 @@
 </script>
 <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
 
-    
+<!-- ... -->
+
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous" />
+<link rel="stylesheet" href="trackswitch.min.css" />
+
+<!-- ... -->
+
+<div class="player">
+  <p>
+      Example trackswitch.js instance.
+  </p>
+  <img src="mix.png" class="seekable"/>
+  <ts-track title="Drums" data-img="drums.png">
+      <ts-source src="drums.mp3" type="audio/mpeg"></ts-source>
+  </ts-track>
+  <ts-track title="Synth" data-img="synth.png">
+      <ts-source src="synth.mp3" type="audio/mpeg"></ts-source>
+  </ts-track>
+  <ts-track title="Bass" data-img="bass.png">
+      <ts-source src="bass.mp3" type="audio/mpeg"></ts-source>
+  </ts-track>
+  <ts-track title="Violins" data-img="violins.png">
+      <ts-source src="violins.mp3" type="audio/mpeg"></ts-source>
+  </ts-track>
+</div>
+
+<!-- ... -->
+
+<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="crossorigin="anonymous"></script>
+<script src="trackswitch.min.js"></script>
+<script type="text/javascript">
+    jQuery(document).ready(function() {
+        jQuery(".player").trackSwitch({spacebar: true});
+    });
+</script>
+
+<!-- ... -->
+
     
 # Supplemental Material for Physical Modeling using Recurrent Neural Networks with Fast Convolutional Layers
 
