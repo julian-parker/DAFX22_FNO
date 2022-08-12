@@ -12,7 +12,7 @@
 <!-- ... -->
 
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous" />
-<link rel="stylesheet" href="trackswitch.min.css" />
+<link rel="stylesheet" href="{{ site.baseurl}}/css/trackswitch.min.css" />
 
 <!-- ... -->
 
@@ -38,7 +38,7 @@
 <!-- ... -->
 
 <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="crossorigin="anonymous"></script>
-<script src="trackswitch.min.js"></script>
+<script src="{{ site.baseurl}}/js/trackswitch.min.js"></script>
 <script type="text/javascript">
     jQuery(document).ready(function() {
         jQuery(".player").trackSwitch({spacebar: true});
