@@ -1,15 +1,6 @@
-<head>
-<script type="text/x-mathjax-config"> MathJax.Hub.Config({ TeX: { equationNumbers: { autoNumber: "all" } } }); </script>
-<script type="text/x-mathjax-config">
-	MathJax.Hub.Config({
-		tex2jax: {
-			inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-      processEscapes: true
-  }
-});
-</script>
-<script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
-</head>
+---
+usemathjax: true
+---
     
     
 # Supplemental Material for Physical Modeling using Recurrent Neural Networks with Fast Convolutional Layers
@@ -57,6 +48,11 @@
 
 ## Sound Examples
 
+<audio controls>
+  <source src="https://github.com/julian-parker/DAFX22_FNO/raw/main/examples/sounds/nonlinear_string_gru.wav" type="audio/ogg">
+  <source src="https://github.com/julian-parker/DAFX22_FNO/raw/main/examples/sounds/nonlinear_string_gru.wav" type="audio/mpeg">
+  Your browser does not support the audio tag.
+</audio>
 
 ## Animations
 
