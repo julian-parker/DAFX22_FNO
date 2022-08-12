@@ -22,7 +22,7 @@ title: Physical Modeling using Recurrent Neural Networks with Fast Convolutional
 email: firstname.lastname@native-instruments.de
 description: >- # this means to ignore newlines until "baseurl:"
   This is the accompanying repository to the paper submission for DAFx20in22, Vienna, Austria by Julian D. Parker, Sebastian J. Schlecht, Rudolf Rabenstein, Maximilian Schäfer. The paper is currently in review.
-#baseurl: "" # the subpath of your site, e.g. /blog
+baseurl: "/DAFX22_FNO" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 
 github_username:  julian-parker
