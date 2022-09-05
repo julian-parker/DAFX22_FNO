@@ -142,4 +142,10 @@
 |$d_3$  | 6e-5       |
 |$T_{s0}$ | 60.97      |
 
-## Network Hyperparameters
+## Network/Training Hyperparameters
+
+Visible in:
+`train_1d_string.py` 
+`train_2d_wave.py`  
+`train_1d_nonlinear_string.py`
+
