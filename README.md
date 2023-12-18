@@ -1,6 +1,6 @@
 # Physical Modeling using Recurrent Neural Networks with Fast Convolutional Layers
 
-This is the accompanying repository to the paper submission for DAFx20in22, Vienna, Austria by Julian D. Parker, Sebastian J. Schlecht, Rudolf Rabenstein, Maximilian Schäfer.
+This is the accompanying repository to the paper at DAFx20in22, Vienna, Austria by Julian D. Parker, Sebastian J. Schlecht, Rudolf Rabenstein, Maximilian Schäfer.
 
 Sound examples can be found on the [accompanying page](https://julian-parker.github.io/DAFX22_FNO/).
 
